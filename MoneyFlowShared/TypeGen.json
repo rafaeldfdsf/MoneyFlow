@@ -1,0 +1,20 @@
+{
+  "generatorOptions": {
+    "baseOutputDirectory": "C:/Work/MoneyFlow/MoneyFlowUI/src/app/shared/dtos",
+    "fileHeading": "// Arquivo gerado automaticamente pelo TypeGen a partir dos DTOs C# (n�o editar)\n",
+    "outputFileType": "class",
+    "explicitPublicAccessor": false,
+    "createIndexFile": false,
+    "singleQuotes": true,
+    "customTypeMappings": {
+      "System.String": "string"
+    },
+    "customTypeScriptCodeSnippet": "{propertyName}!: {propertyType};"
+  },
+  "assemblies": [
+    "bin/Debug/net9.0/MoneyFlowShared.dll"
+  ],
+  "templates": {
+    "class": "./TypeGenTemplates/class.tstemplate"
+  }
+}

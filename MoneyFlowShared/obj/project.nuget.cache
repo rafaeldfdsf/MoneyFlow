@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "En7ZMhircz8=",
+  "success": true,
+  "projectFilePath": "C:\\Work\\MoneyFlow\\MoneyFlowShared\\MoneyFlowShared.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Rafael Rodrigues\\.nuget\\packages\\typegen\\6.0.3\\typegen.6.0.3.nupkg.sha512"
+  ],
+  "logs": []
+}

@@ -1,0 +1,6 @@
+// Arquivo gerado automaticamente pelo TypeGen a partir dos DTOs C# (não editar)
+export class {{TypeName}} {
+{{#each Properties}}
+    {{Name}}!: {{TypeScriptType}};
+{{/each}}
+}

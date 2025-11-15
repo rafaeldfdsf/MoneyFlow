@@ -1,0 +1,21 @@
+# Visual Studio
+.vs/
+*/bin/
+*/obj/
+
+# DotNet user files
+*.user
+*.suo
+
+# TypeGen
+TypeGenOutput/
+*.ts
+!MoneyFlowShared/TypeGenTemplates/
+
+# Angular (MoneyFlowUI)
+MoneyFlowUI/node_modules/
+MoneyFlowUI/dist/
+MoneyFlowUI/.angular/
+
+# Logs
+*.log

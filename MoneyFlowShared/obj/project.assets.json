@@ -1,0 +1,150 @@
+{
+  "version": 3,
+  "targets": {
+    "net9.0": {
+      "TypeGen/6.0.3": {
+        "type": "package",
+        "compile": {
+          "lib/net9.0/TypeGen.Core.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0/TypeGen.Core.dll": {
+            "related": ".xml"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "TypeGen/6.0.3": {
+      "sha512": "FbgRxhMUvPjj46r26sKNpXEtt6/lsTkYarvAKxrhADz4imXeoX1NtjyHCr4PF6SXmmPJEAWcE2PVQI1VXtxckw==",
+      "type": "package",
+      "path": "typegen/6.0.3",
+      "hasTools": true,
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE",
+        "lib/net9.0/TypeGen.Core.dll",
+        "lib/net9.0/TypeGen.Core.xml",
+        "lib/netstandard2.0/TypeGen.Core.dll",
+        "lib/netstandard2.0/TypeGen.Core.xml",
+        "tools/Microsoft.Extensions.DependencyInjection.Abstractions.dll",
+        "tools/Microsoft.Extensions.DependencyInjection.dll",
+        "tools/Namotion.Reflection.dll",
+        "tools/Newtonsoft.Json.dll",
+        "tools/NuGet.Common.dll",
+        "tools/NuGet.Configuration.dll",
+        "tools/NuGet.Frameworks.dll",
+        "tools/System.CommandLine.dll",
+        "tools/TypeGen.Cli.deps.json",
+        "tools/TypeGen.Cli.dll",
+        "tools/TypeGen.Cli.pdb",
+        "tools/TypeGen.Cli.runtimeconfig.json",
+        "tools/TypeGen.Core.dll",
+        "tools/TypeGen.Core.pdb",
+        "tools/TypeGen.Core.xml",
+        "tools/TypeGen.exe",
+        "tools/cs/System.CommandLine.resources.dll",
+        "tools/de/System.CommandLine.resources.dll",
+        "tools/es/System.CommandLine.resources.dll",
+        "tools/fr/System.CommandLine.resources.dll",
+        "tools/it/System.CommandLine.resources.dll",
+        "tools/ja/System.CommandLine.resources.dll",
+        "tools/ko/System.CommandLine.resources.dll",
+        "tools/pl/System.CommandLine.resources.dll",
+        "tools/pt-BR/System.CommandLine.resources.dll",
+        "tools/ru/System.CommandLine.resources.dll",
+        "tools/runtimes/unix/lib/netstandard1.3/System.Security.Cryptography.ProtectedData.dll",
+        "tools/runtimes/win/lib/netstandard1.3/System.Security.Cryptography.ProtectedData.dll",
+        "tools/tr/System.CommandLine.resources.dll",
+        "tools/zh-Hans/System.CommandLine.resources.dll",
+        "tools/zh-Hant/System.CommandLine.resources.dll",
+        "typegen.6.0.3.nupkg.sha512",
+        "typegen.nuspec"
+      ]
+    }
+  },
+  "projectFileDependencyGroups": {
+    "net9.0": [
+      "TypeGen >= 6.0.3"
+    ]
+  },
+  "packageFolders": {
+    "C:\\Users\\Rafael Rodrigues\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+  },
+  "project": {
+    "version": "1.0.0",
+    "restore": {
+      "projectUniqueName": "C:\\Work\\MoneyFlow\\MoneyFlowShared\\MoneyFlowShared.csproj",
+      "projectName": "MoneyFlowShared",
+      "projectPath": "C:\\Work\\MoneyFlow\\MoneyFlowShared\\MoneyFlowShared.csproj",
+      "packagesPath": "C:\\Users\\Rafael Rodrigues\\.nuget\\packages\\",
+      "outputPath": "C:\\Work\\MoneyFlow\\MoneyFlowShared\\obj\\",
+      "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
+      "configFilePaths": [
+        "C:\\Users\\Rafael Rodrigues\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+      ],
+      "originalTargetFrameworks": [
+        "net9.0"
+      ],
+      "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "https://api.nuget.org/v3/index.json": {}
+      },
+      "frameworks": {
+        "net9.0": {
+          "targetAlias": "net9.0",
+          "projectReferences": {}
+        }
+      },
+      "warningProperties": {
+        "warnAsError": [
+          "NU1605"
+        ]
+      },
+      "restoreAuditProperties": {
+        "enableAudit": "true",
+        "auditLevel": "low",
+        "auditMode": "direct"
+      },
+      "SdkAnalysisLevel": "9.0.300"
+    },
+    "frameworks": {
+      "net9.0": {
+        "targetAlias": "net9.0",
+        "dependencies": {
+          "TypeGen": {
+            "target": "Package",
+            "version": "[6.0.3, )"
+          }
+        },
+        "imports": [
+          "net461",
+          "net462",
+          "net47",
+          "net471",
+          "net472",
+          "net48",
+          "net481"
+        ],
+        "assetTargetFallback": true,
+        "warn": true,
+        "frameworkReferences": {
+          "Microsoft.NETCore.App": {
+            "privateAssets": "all"
+          }
+        },
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.305/PortableRuntimeIdentifierGraph.json"
+      }
+    }
+  }
+}
