@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MoneyFlowAPI.Models;
 using MoneyFlowAPI.Services.Interfaces;
 using MoneyFlowShared.DTOs;
 
