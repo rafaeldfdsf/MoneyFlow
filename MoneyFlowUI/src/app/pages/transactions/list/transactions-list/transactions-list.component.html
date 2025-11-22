@@ -1,0 +1,25 @@
+<p-toolbar styleClass="mb-6">
+  <ng-template #start>
+    <p-button label="Nova" icon="pi pi-plus" severity="secondary" class="mr-2" (onClick)="openNew()" />
+    <p-button label="Eliminar" icon="pi pi-trash" severity="secondary" outlined (onClick)="deleteSelectedProducts()" />
+  </ng-template>
+</p-toolbar>
+
+<app-generic-table
+    [title]="'Transações'"
+    [data]="transactions()"
+    [columns]="columns"
+    [paginator]="true"
+    [rows]="5"
+    [loading]="loading()"
+    (rowClick)="onRowClick($event)"
+>
+    <!-- Custom header -->
+    <ng-template #headerTemplate>
+    <div class="flex justify-between items-center mb-3">
+        <h2>Transações</h2>
+        <button pButton label="Adicionar Transação" icon="pi pi-plus" (click)="openNew()"></button>
+    </div>
+    </ng-template>
+</app-generic-table>
+

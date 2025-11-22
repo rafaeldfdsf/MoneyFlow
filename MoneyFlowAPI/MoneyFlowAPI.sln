@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36429.23
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoneyFlowAPI", "MoneyFlowAPI.csproj", "{5B824B86-A641-36B3-1EC4-967A0E380289}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoneyFlowShared", "..\MoneyFlowShared\MoneyFlowShared.csproj", "{1AAB73A9-6077-5416-BB65-83368C9F2EFD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5B824B86-A641-36B3-1EC4-967A0E380289}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B824B86-A641-36B3-1EC4-967A0E380289}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B824B86-A641-36B3-1EC4-967A0E380289}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B824B86-A641-36B3-1EC4-967A0E380289}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1AAB73A9-6077-5416-BB65-83368C9F2EFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1AAB73A9-6077-5416-BB65-83368C9F2EFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1AAB73A9-6077-5416-BB65-83368C9F2EFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1AAB73A9-6077-5416-BB65-83368C9F2EFD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {79C41115-27C8-4704-8BC6-071857AE79D4}
+	EndGlobalSection
+EndGlobal

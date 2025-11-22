@@ -1,0 +1,95 @@
+<div class="card">
+  <!-- HEADER CUSTOMIZÁVEL -->
+  @if (headerTemplate) {
+    <ng-container [ngTemplateOutlet]="headerTemplate"></ng-container>
+  } @else {
+    <div class="flex justify-between items-center mb-3">
+      <h3 class="font-semibold text-lg">{{ title() }}</h3>
+      <div class="flex items-center gap-2">
+        <input
+          type="text"
+          pInputText
+          placeholder="Pesquisar..."
+          (input)="onGlobalFilter($event)"
+        />
+        <button
+          pButton
+          icon="pi pi-filter-slash"
+          class="p-button-outlined"
+          (click)="clearFilters()"
+        ></button>
+      </div>
+    </div>
+  }
+
+  <!-- TABELA -->
+  <p-table
+    #dt
+    [value]="data()"
+    [paginator]="paginator()"
+    [rows]="rows()"
+    [globalFilterFields]="globalFilterFields()"
+    [loading]="loading()"
+    responsiveLayout="scroll"
+    [rowHover]="true"
+    (onRowSelect)="onSelectRow($event)"
+  >
+    <!-- HEADER -->
+    <ng-template pTemplate="header">
+      <tr>
+        @for (col of columns(); track col.field) {
+          <th
+            [pSortableColumn]="col.sortable ? col.field : undefined"
+            [style.width]="col.width"
+            [style.text-align]="col.align || 'left'"
+          >
+            {{ col.header }}
+          </th>
+        }
+      </tr>
+    </ng-template>
+
+    <!-- BODY -->
+    <ng-template pTemplate="body" let-row>
+      <tr (click)="rowClick.emit(row)">
+        @for (col of columns(); track col.field) {
+          <td [style.text-align]="col.align || 'left'" [style.width]="col.width">
+            
+            <!-- 1️⃣ Template personalizado -->
+            @if (col.template) {
+              <ng-container
+                [ngTemplateOutlet]="col.template"
+                [ngTemplateOutletContext]="{ $implicit: row }"
+              ></ng-container>
+
+            <!-- 2️⃣ Coluna de ações automáticas -->
+            } @else if (col.actions?.length) {
+              <div class="flex gap-2 justify-center">
+                <button
+                  *ngFor="let action of col.actions"
+                  pButton
+                  [icon]="action.icon"
+                  [label]="action.label ?? ''"
+                  [ngClass]="action.class || 'p-button-text'"
+                  (click)="action.onClick(row)"
+                ></button>
+              </div>
+
+            <!-- 3️⃣ Valor normal com formatação automática -->
+            } @else {
+              {{ formatCell(getFieldValue(row, col.field), col) }}
+            }
+
+          </td>
+        }
+      </tr>
+    </ng-template>
+
+    <!-- FOOTER -->
+    @if (footerTemplate) {
+      <ng-template pTemplate="footer">
+        <ng-container [ngTemplateOutlet]="footerTemplate"></ng-container>
+      </ng-template>
+    }
+  </p-table>
+</div>

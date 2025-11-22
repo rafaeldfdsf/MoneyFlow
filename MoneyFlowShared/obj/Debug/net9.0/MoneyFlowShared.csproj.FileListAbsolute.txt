@@ -23,3 +23,4 @@ C:\Work\MoneyFlow\MoneyFlowAPI\MoneyFlowShared\obj\Debug\net9.0\MoneyFlowShared.
 C:\Work\MoneyFlow\MoneyFlowAPI\MoneyFlowShared\obj\Debug\net9.0\refint\MoneyFlowShared.dll
 C:\Work\MoneyFlow\MoneyFlowAPI\MoneyFlowShared\obj\Debug\net9.0\MoneyFlowShared.pdb
 C:\Work\MoneyFlow\MoneyFlowAPI\MoneyFlowShared\obj\Debug\net9.0\ref\MoneyFlowShared.dll
+C:\Work\MoneyFlow\MoneyFlowShared\obj\Debug\net9.0\MoneyFlowShared.sourcelink.json
