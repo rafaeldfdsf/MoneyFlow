@@ -23,3 +23,10 @@
     </ng-template>
 </app-generic-table>
 
+
+<app-transaction-form
+  [(visible)]="dialogVisible"
+  [model]="selectedTransaction"
+  [isEdit]="isEdit"
+  (saveTransaction)="onSave($event)">
+</app-transaction-form>

@@ -17,7 +17,13 @@ export class GenericDialogComponent {
 
     @Input() header = 'Dialog';
     @Input() width = '450px';
+    @Input() height: string = 'auto';
 
     @Input() content!: TemplateRef<any>;
     @Input() footer!: TemplateRef<any>;
+
+    onVisibleChange(v: boolean) {
+        this.visible = v;
+        this.visibleChange.emit(v);
+    }
 }

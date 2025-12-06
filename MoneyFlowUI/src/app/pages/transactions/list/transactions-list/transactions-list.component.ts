@@ -1,14 +1,15 @@
-import { Component, signal } from '@angular/core';
+import { Component, Injector, signal } from '@angular/core';
 import { Toolbar } from "primeng/toolbar";
 import { Button } from "primeng/button";
 import { GenericTableComponent } from "@/shared/components/generic-table/generic-table";
 import { DTO_Transactions } from '@/shared/dtos/DTO_Transactions';
 import { TransactionsService } from '@/services/Transactions.service';
 import { TableColumnDefinition } from '@/shared/models/table-column.model';
+import { TransactionFormComponent } from '../../form/transaction-form/transaction-form.component';
 
 @Component({
   selector: 'app-transactions-list',
-  imports: [Toolbar, Button, GenericTableComponent],
+  imports: [Toolbar, Button, GenericTableComponent, TransactionFormComponent],
   templateUrl: './transactions-list.component.html',
   styleUrl: './transactions-list.component.scss'
 })
@@ -17,6 +18,12 @@ export class TransactionsListComponent {
   // Lista de transações (dados vindos do backend)
   transactions = signal<DTO_Transactions[]>([]);
   loading = signal(false);
+  selectedCustomer: any;
+  dialogInjector!: Injector;
+
+  selectedTransaction: any = {};
+  isEdit = false;
+  dialogVisible = false;
 
   // Definição das colunas da tabela
   columns: TableColumnDefinition<DTO_Transactions>[] = [
@@ -37,7 +44,7 @@ export class TransactionsListComponent {
     }
   ];
 
-  constructor(private transactionsService: TransactionsService) { }
+  constructor(private transactionsService: TransactionsService, private injectorFactory: Injector) { }
 
   ngOnInit(): void {
     this.loadTransactions();
@@ -60,11 +67,22 @@ export class TransactionsListComponent {
 
 
   onRowClick(row: any) {
-    alert(`Cliente selecionado: ${row.name}`);
+    this.selectedCustomer = row;
+
+    this.dialogInjector = Injector.create({
+      providers: [
+        { provide: 'model', useValue: row }
+      ],
+      parent: this.injectorFactory
+    });
+
+    this.dialogVisible = true;
   }
 
   edit(row: any) {
-    console.log('Editar:', row);
+    this.isEdit = true;
+    this.selectedTransaction = { ...row };
+    this.dialogVisible = true;
   }
 
   remove(row: any) {
@@ -72,7 +90,14 @@ export class TransactionsListComponent {
   }
 
   openNew() {
-
+    this.isEdit = false;
+    this.selectedTransaction = {
+      description: '',
+      amount: 0,
+      isIncome: false,
+      transactionDate: new Date().toISOString().substring(0, 10)
+    };
+    this.dialogVisible = true;
   }
 
   deleteSelectedProducts() {
@@ -81,6 +106,10 @@ export class TransactionsListComponent {
 
   exportCSV() {
 
+  }
+
+  onSave(transaction: any) {
+    console.log("Guardado:", transaction);
   }
 
 }

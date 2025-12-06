@@ -1,6 +1,8 @@
 <p-dialog
-    [(visible)]="visible"
+    [visible]="visible"
+    (visibleChange)="onVisibleChange($event)"
     [style]="{ width: width }"
+    [contentStyle]="{ height: height }"
     [modal]="true"
     [header]="header">
 
@@ -11,5 +13,4 @@
     <ng-template pTemplate="footer">
         <ng-container *ngTemplateOutlet="footer"></ng-container>
     </ng-template>
-
 </p-dialog>

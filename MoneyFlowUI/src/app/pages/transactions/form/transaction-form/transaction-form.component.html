@@ -1,1 +1,70 @@
-<p>transaction-form works!</p>
+<app-generic-dialog
+  [visible]="visible"
+  (visibleChange)="onDialogVisibleChange($event)"
+  [header]="isEdit ? 'Editar Transação' : 'Nova Transação'"
+  [width]="'500px'"
+  [content]="formContent"
+  [footer]="formFooter"
+></app-generic-dialog>
+
+<!-- Conteúdo do formulário -->
+<ng-template #formContent>
+  <div class="p-fluid p-formgrid p-grid">
+
+    <!-- Descrição -->
+    <div class="p-field p-col-12">
+      <label class="p-mb-2 font-medium">Descrição</label>
+      <input
+        pInputText
+        class="w-full"
+        placeholder="Ex: Pagamento da renda"
+        [(ngModel)]="model.description"
+      />
+    </div>
+
+    <!-- Valor -->
+    <div class="p-field p-col-12 p-md-6">
+      <label class="p-mb-2 font-medium">Valor (€)</label>
+      <input
+        pInputText
+        type="number"
+        class="w-full"
+        placeholder="0.00"
+        [(ngModel)]="model.amount"
+      />
+    </div>
+
+    <!-- Tipo -->
+    <div class="p-field p-col-12 p-md-6">
+      <label class="p-mb-2 font-medium">Tipo</label>
+      <p-select
+        class="w-full"
+        [options]="types"
+        optionLabel="label"
+        optionValue="value"
+        placeholder="Selecione"
+        [(ngModel)]="model.isIncome"
+      ></p-select>
+    </div>
+
+    <!-- Data -->
+    <div class="p-field p-col-12">
+      <label class="p-mb-2 font-medium">Data</label>
+      <input
+        pInputText
+        type="date"
+        class="w-full"
+        [(ngModel)]="model.transactionDate"
+      />
+    </div>
+
+  </div>
+</ng-template>
+
+<!-- Footer -->
+<ng-template #formFooter>
+  <p-button label="Cancelar" icon="pi pi-times" text (click)="close()"></p-button>
+  <p-button label="Guardar" icon="pi pi-check" (click)="save()"></p-button>
+</ng-template>
+
+
