@@ -1,16 +1,16 @@
 <p-dialog
-    [visible]="visible"
-    (visibleChange)="onVisibleChange($event)"
-    [style]="{ width: width }"
-    [contentStyle]="{ height: height }"
-    [modal]="true"
-    [header]="header">
+  [visible]="visible"
+  (visibleChange)="onVisibleChange($event)"
+  [style]="{ width: width }"
+  [contentStyle]="{ height: height }"
+  [modal]="true"
+  [header]="header"
+>
+  <!-- Conteúdo dinâmico -->
+  <ng-container *ngTemplateOutlet="content"></ng-container>
 
-    <!-- Conteúdo dinâmico -->
-    <ng-container *ngTemplateOutlet="content"></ng-container>
-
-    <!-- Footer dinâmico -->
-    <ng-template pTemplate="footer">
-        <ng-container *ngTemplateOutlet="footer"></ng-container>
-    </ng-template>
+  <!-- Footer dinâmico -->
+  <ng-template #footer>
+    <ng-container *ngTemplateOutlet="footerTemplate"></ng-container>
+  </ng-template>
 </p-dialog>
