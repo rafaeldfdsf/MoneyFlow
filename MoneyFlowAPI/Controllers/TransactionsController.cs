@@ -15,10 +15,21 @@ namespace MoneyFlowAPI.Controllers
             _transactionService = transactionService;
         }
 
-        [HttpGet]
+        [HttpGet("transactions")]
         public async Task<ActionResult<DTO_ResponseTable<List<DTO_Transactions>>>> GetAll()
         {
             var response = await _transactionService.GetAllTransactionsAsync();
+
+            if (!response.Success)
+                return BadRequest(response);
+
+            return Ok(response);
+        }
+
+        [HttpPost("transaction")]
+        public async Task<ActionResult<DTO_ResponseTable<DTO_Transactions>>> PostTransaction(DTO_Transactions transaction)
+        {
+            var response = await _transactionService.CreateTransactionAsync(transaction);
 
             if (!response.Success)
                 return BadRequest(response);

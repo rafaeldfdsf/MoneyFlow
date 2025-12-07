@@ -100,6 +100,17 @@ export class TransactionsListComponent {
     this.dialogVisible = true;
   }
 
+  openEdit() {
+    this.isEdit = false;
+    this.selectedTransaction = {
+      description: '',
+      amount: 0,
+      isIncome: false,
+      transactionDate: new Date().toISOString().substring(0, 10)
+    };
+    this.dialogVisible = true;
+  }
+
   deleteSelectedProducts() {
 
   }
@@ -109,7 +120,19 @@ export class TransactionsListComponent {
   }
 
   onSave(transaction: any) {
-    console.log("Guardado:", transaction);
+    this.loading.set(true);
+    this.transactionsService.create(transaction).subscribe({
+      next: (data) => {
+        if (data) {
+          this.transactions.update(list => [...list, data]);
+        }
+        this.loading.set(false);
+      },
+      error: (err) => {
+        console.error('Erro:', err);
+        this.loading.set(false);
+      }
+    });
   }
 
 }

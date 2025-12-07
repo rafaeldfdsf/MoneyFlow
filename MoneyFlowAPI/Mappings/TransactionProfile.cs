@@ -9,6 +9,7 @@ namespace MoneyFlowAPI.Mappings
         public TransactionProfile()
         {
             CreateMap<Transaction, DTO_Transactions>();
+            CreateMap<DTO_Transactions, Transaction>();
         }
     }
 }
