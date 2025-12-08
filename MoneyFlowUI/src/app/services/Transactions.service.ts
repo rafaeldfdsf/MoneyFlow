@@ -2,11 +2,12 @@ import { DTO_Transactions } from '@/shared/dtos/DTO_Transactions';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { BaseHttpService } from './base-http.service';
+import { environment } from 'src/environment.development';
 
 @Injectable({ providedIn: 'root' })
 export class TransactionsService {
 
-    private apiUrl = 'https://localhost:7085/api/Transactions';
+    private readonly apiUrl = `${environment.apiUrl}/Transactions`;
 
     constructor(private base: BaseHttpService) { }
 
