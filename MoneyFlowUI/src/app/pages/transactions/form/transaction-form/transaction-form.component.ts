@@ -8,7 +8,6 @@ import { Select } from 'primeng/select';
 
 // O teu diálogo genérico
 import { GenericDialogComponent } from '@/shared/components/generic-dialog/generic-dialog.component';
-import { Dialog } from "primeng/dialog";
 
 @Component({
   selector: 'app-transaction-form',
