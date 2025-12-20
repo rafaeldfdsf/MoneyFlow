@@ -130,7 +130,7 @@ export class GenericTableComponent<T> {
   onSelectionChange(event: any) {
     if (!this.showCheckbox()) return;
 
-    this.selection.set(event.value);
-    this.selectionChange.emit(event.value);
+    this.selection.set(event);
+    this.selectionChange.emit(event);
   }
 }

@@ -1,7 +1,7 @@
 <p-toolbar styleClass="mb-6">
   <ng-template #start>
     <p-button label="Nova" icon="pi pi-plus" severity="secondary" class="mr-2" (onClick)="openNew()" />
-    <p-button label="Eliminar" icon="pi pi-trash" severity="secondary" outlined (onClick)="deleteSelectedProducts()" />
+    <p-button label="Eliminar" icon="pi pi-trash" severity="secondary" [disabled]="selectedTransactions.length === 0" outlined (onClick)="deleteSelectedProducts()" />
   </ng-template>
 </p-toolbar>
 
