@@ -25,6 +25,8 @@ export class TransactionsListComponent {
   isEdit = false;
   dialogVisible = false;
 
+  selectedTransactions: DTO_Transactions[] = [];
+
   // Definição das colunas da tabela
   columns: TableColumnDefinition<DTO_Transactions>[] = [
     // { field: 'id', header: 'ID', sortable: true, width: '80px', align: 'center' },
@@ -135,4 +137,8 @@ export class TransactionsListComponent {
     });
   }
 
+  onSelectionChange(rows: DTO_Transactions[]) {
+    this.selectedTransactions = rows;
+    console.log('Selecionadas:', rows);
+  }
 }

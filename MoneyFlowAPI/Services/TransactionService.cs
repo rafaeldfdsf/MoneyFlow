@@ -2,20 +2,28 @@
 using MoneyFlowAPI.Application.Transactions;
 using MoneyFlowAPI.Services.Interfaces;
 using MoneyFlowShared.DTOs;
-using System.Transactions;
+using MoneyFlowAPI.Models;
 
 namespace MoneyFlowAPI.Services
 {
     public class TransactionService : ITransactionService
     {
         private readonly GetAllTransactionsUseCase _getAllTransactions;
+        private readonly GetTransactionUseCase _getTransaction;
         private readonly CreateTransactionUseCase _createTransaction;
+        private readonly DeleteTransactionUseCase _deleteTransactions;
         private readonly IMapper _mapper;
 
-        public TransactionService(GetAllTransactionsUseCase getAllTransactions, CreateTransactionUseCase createTransaction, IMapper mapper)
+        public TransactionService(GetAllTransactionsUseCase getAllTransactions,
+                                  GetTransactionUseCase getTransaction,
+                                  CreateTransactionUseCase createTransaction,
+                                  DeleteTransactionUseCase deleteTransaction,
+                                  IMapper mapper)
         {
             _getAllTransactions = getAllTransactions;
+            _getTransaction = getTransaction;
             _createTransaction = createTransaction;
+            _deleteTransactions = deleteTransaction;
             _mapper = mapper;
         }
 
@@ -36,6 +44,25 @@ namespace MoneyFlowAPI.Services
             catch (Exception ex)
             {
                 return DTO_ResponseTable<List<DTO_Transactions>>.FailureResult($"Erro ao obter transações: {ex.Message}");
+            }
+        }
+
+        public async Task<DTO_ResponseTable<DTO_Transactions>> GetTransactionAsync(int id)
+        {
+            try
+            {
+                Transaction? transaction = await _getTransaction.ExecuteAsync(id);
+
+                if (transaction == null)
+                    return DTO_ResponseTable<DTO_Transactions>.FailureResult("Nenhuma transação encontrada.");
+
+                var dtoList = _mapper.Map<DTO_Transactions>(transaction);
+
+                return DTO_ResponseTable<DTO_Transactions>.SuccessResult(dtoList);
+            }
+            catch (Exception ex)
+            {
+                return DTO_ResponseTable<DTO_Transactions>.FailureResult($"Erro ao obter transações: {ex.Message}");
             }
         }
         #endregion
@@ -69,6 +96,33 @@ namespace MoneyFlowAPI.Services
             {
                 return DTO_ResponseTable<DTO_Transactions>.FailureResult(
                     $"Erro ao criar transação: {ex.Message}"
+                );
+            }
+        }
+        #endregion
+
+        #region DELETE
+        public async Task<DTO_ResponseTable<string>> DeleteTransactionsAsync(List<int> transactions)
+        {
+            try
+            {
+                if (transactions == null || !transactions.Any())
+                    return DTO_ResponseTable<string>.FailureResult("Nenhuma transação para exclusão.");
+
+                // Executa serviço/command responsável pela exclusão
+                bool deleted = await _deleteTransactions.ExecuteAsync(transactions);
+
+                if (!deleted)
+                    return DTO_ResponseTable<string>.FailureResult("Falha ao excluir transações.");
+
+                return DTO_ResponseTable<string>.SuccessResult(
+                    "Transações removidas com sucesso."
+                );
+            }
+            catch (Exception ex)
+            {
+                return DTO_ResponseTable<string>.FailureResult(
+                    $"Erro ao excluir transações: {ex.Message}"
                 );
             }
         }

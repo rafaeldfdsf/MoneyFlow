@@ -26,10 +26,14 @@
     <p-table
       #dt
       [value]="data()"
+      [selection]="showCheckbox() ? selection() : null"
+      [selectionMode]="showCheckbox() ? 'multiple' : null"
+      dataKey="id"
       [paginator]="paginator()"
       [rows]="rows()"
       [globalFilterFields]="globalFilterFields()"
       [loading]="loading()"
+      (selectionChange)="onSelectionChange($event)"
       responsiveLayout="scroll"
       [rowHover]="true"
       (onRowSelect)="onSelectRow($event)"
@@ -37,6 +41,12 @@
       <!-- HEADER -->
       <ng-template pTemplate="header">
         <tr>
+          @if (showCheckbox()) {
+            <th style="width: 3rem" (click)="$event.stopPropagation()">
+              <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+            </th>
+          }
+
           @for (col of columns(); track col.field) {
             <th
               [pSortableColumn]="col.sortable ? col.field : undefined"
@@ -52,6 +62,15 @@
       <!-- BODY -->
       <ng-template pTemplate="body" let-row>
         <tr (click)="rowClick.emit(row)">
+          @if (showCheckbox()) {
+      <td style="width: 3rem">
+        <p-tableCheckbox
+          [value]="row"
+          (click)="$event.stopPropagation()"
+        ></p-tableCheckbox>
+      </td>
+    }
+    
           @for (col of columns(); track col.field) {
             <td [style.text-align]="col.align || 'left'" [style.width]="col.width">
 

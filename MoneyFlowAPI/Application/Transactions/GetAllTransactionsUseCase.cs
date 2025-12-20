@@ -7,10 +7,7 @@ namespace MoneyFlowAPI.Application.Transactions
     {
         private readonly AppDbContext _context;
 
-        public GetAllTransactionsUseCase(AppDbContext context)
-        {
-            _context = context;
-        }
+        public GetAllTransactionsUseCase(AppDbContext context) => _context = context;
 
         public async Task<List<Transaction>> ExecuteAsync()
         {
@@ -19,10 +16,6 @@ namespace MoneyFlowAPI.Application.Transactions
                 .AsNoTracking()
                 .OrderByDescending(t => t.TransactionDate)
                 .ToListAsync();
-
-            // 🔹 Regras de negócio (se existirem)
-            // Exemplo: apenas transações ativas, ou limite de histórico, etc.
-            // transactions = transactions.Where(t => t.IsActive).ToList();
 
             return transactions;
         }

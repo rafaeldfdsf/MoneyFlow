@@ -25,10 +25,13 @@ builder.Services.AddAutoMapper(typeof(TransactionProfile));
 
 #region Services
 builder.Services.AddScoped<AuthService>();
-builder.Services.AddScoped<ITransactionService, TransactionService>();
 
+// Transactions
+builder.Services.AddScoped<ITransactionService, TransactionService>();
 builder.Services.AddScoped<GetAllTransactionsUseCase>();
+builder.Services.AddScoped<GetTransactionUseCase>();
 builder.Services.AddScoped<CreateTransactionUseCase>();
+builder.Services.AddScoped<DeleteTransactionUseCase>();
 #endregion
 
 // Configurar JWT

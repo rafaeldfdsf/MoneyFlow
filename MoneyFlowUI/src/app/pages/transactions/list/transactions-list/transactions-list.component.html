@@ -10,9 +10,11 @@
     [data]="transactions()"
     [columns]="columns"
     [paginator]="true"
+    [showCheckbox]="true"
     [rows]="5"
     [loading]="loading()"
     (rowClick)="onRowClick($event)"
+    (selectionChange)="onSelectionChange($event)"
 >
     <!-- Custom header -->
     <ng-template #headerTemplate>

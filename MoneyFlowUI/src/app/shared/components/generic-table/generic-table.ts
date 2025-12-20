@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ContentChild, EventEmitter, input, Input, output, Output, PipeTransform, signal, TemplateRef, ViewChild } from '@angular/core';
+import { Component, ContentChild, input, output, PipeTransform, signal, TemplateRef, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
@@ -53,6 +53,15 @@ export class GenericTableComponent<T> {
   // ⚡ Output
   rowClick = output<T>();
 
+  // controla se a tabela mostra checkbox de seleção
+  showCheckbox = input<boolean>(false);
+  // linhas selecionadas (quando showCheckbox = true)
+  selection = signal<T[]>([]);
+  // emite seleção para o componente pai
+  selectionChange = output<T[]>();
+
+
+
   @ViewChild('dt') dt!: Table;
 
   // 🧱 Content projection templates (do pai)
@@ -71,9 +80,30 @@ export class GenericTableComponent<T> {
   }
 
   onSelectRow(event: any) {
-    const data = Array.isArray(event.data) ? event.data[0] : event.data;
-    if (data) this.rowClick.emit(data);
+    // evento original do DOM
+    const originalEvent: Event | undefined = event.originalEvent;
+
+    // se veio da checkbox, ignorar
+    if (originalEvent) {
+      const target = originalEvent.target as HTMLElement;
+
+      // PrimeNG checkbox usa estes seletores
+      const clickedOnCheckbox =
+        target.closest('p-tablecheckbox') ||
+        target.closest('.p-checkbox') ||
+        target.closest('input[type="checkbox"]');
+
+      if (clickedOnCheckbox) {
+        return;
+      }
+    }
+
+    // seleção normal da linha → editar
+    if (event.data) {
+      this.rowClick.emit(event.data);
+    }
   }
+
 
   getFieldValue(row: any, field: string): any {
     if (!row || !field) return '';
@@ -95,5 +125,12 @@ export class GenericTableComponent<T> {
       default:
         return value ?? '';
     }
+  }
+
+  onSelectionChange(event: any) {
+    if (!this.showCheckbox()) return;
+
+    this.selection.set(event.value);
+    this.selectionChange.emit(event.value);
   }
 }

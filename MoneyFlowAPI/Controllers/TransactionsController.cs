@@ -10,11 +10,9 @@ namespace MoneyFlowAPI.Controllers
     {
         private readonly ITransactionService _transactionService;
 
-        public TransactionsController(ITransactionService transactionService)
-        {
-            _transactionService = transactionService;
-        }
+        public TransactionsController(ITransactionService transactionService) => _transactionService = transactionService;
 
+        #region GET
         [HttpGet("transactions")]
         public async Task<ActionResult<DTO_ResponseTable<List<DTO_Transactions>>>> GetAll()
         {
@@ -26,6 +24,19 @@ namespace MoneyFlowAPI.Controllers
             return Ok(response);
         }
 
+        [HttpGet("transaction")]
+        public async Task<ActionResult<DTO_ResponseTable<DTO_Transactions>>> GetTransaction(int id)
+        {
+            var response = await _transactionService.GetTransactionAsync(id);
+
+            if (!response.Success)
+                return BadRequest(response);
+
+            return Ok(response);
+        }
+        #endregion
+
+        #region POST
         [HttpPost("transaction")]
         public async Task<ActionResult<DTO_ResponseTable<DTO_Transactions>>> PostTransaction(DTO_Transactions transaction)
         {
@@ -36,5 +47,19 @@ namespace MoneyFlowAPI.Controllers
 
             return Ok(response);
         }
+        #endregion
+
+        #region DELETE
+        [HttpDelete("transactions")]
+        public async Task<ActionResult<DTO_ResponseTable<string>>> PostTransaction(List<int> transactions)
+        {
+            var response = await _transactionService.DeleteTransactionsAsync(transactions);
+
+            if (!response.Success)
+                return BadRequest(response);
+
+            return Ok(response);
+        }
+        #endregion
     }
 }
