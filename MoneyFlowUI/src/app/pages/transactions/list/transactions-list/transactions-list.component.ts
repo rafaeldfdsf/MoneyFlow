@@ -26,10 +26,10 @@ export class TransactionsListComponent {
   dialogVisible = false;
 
   selectedTransactions: DTO_Transactions[] = [];
+  SelectedRowId = 0;
 
   // Definição das colunas da tabela
   columns: TableColumnDefinition<DTO_Transactions>[] = [
-    // { field: 'id', header: 'ID', sortable: true, width: '80px', align: 'center' },
     { field: 'description', header: 'Descrição', sortable: true },
     { field: 'amount', header: 'Valor (€)', type: 'currency', sortable: true, align: 'right' },
     { field: 'isIncome', header: 'Tipo', type: 'boolean', sortable: true, width: '100px', align: 'center' },
@@ -68,8 +68,10 @@ export class TransactionsListComponent {
   }
 
 
-  onRowClick(row: any) {
+  onRowClick(row: DTO_Transactions) {
+    this.isEdit = true;
     this.selectedCustomer = row;
+    this.SelectedRowId = row.id;
 
     this.dialogInjector = Injector.create({
       providers: [
@@ -103,7 +105,7 @@ export class TransactionsListComponent {
   }
 
   openEdit() {
-    this.isEdit = false;
+    this.isEdit = true;
     this.selectedTransaction = {
       description: '',
       amount: 0,

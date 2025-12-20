@@ -24,7 +24,7 @@ namespace MoneyFlowAPI.Controllers
             return Ok(response);
         }
 
-        [HttpGet("transaction")]
+        [HttpGet("transaction/{id}")]
         public async Task<ActionResult<DTO_ResponseTable<DTO_Transactions>>> GetTransaction(int id)
         {
             var response = await _transactionService.GetTransactionAsync(id);

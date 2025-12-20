@@ -14,8 +14,7 @@
     [rows]="5"
     [loading]="loading()"
     (rowClick)="onRowClick($event)"
-    (selectionChange)="onSelectionChange($event)"
->
+    (selectionChange)="onSelectionChange($event)">
     <!-- Custom header -->
     <ng-template #headerTemplate>
     <div class="flex justify-between items-center mb-3">
@@ -30,5 +29,7 @@
   [(visible)]="dialogVisible"
   [model]="selectedTransaction"
   [isEdit]="isEdit"
-  (saveTransaction)="onSave($event)">
+  (saveTransaction)="onSave($event)"
+  [idObject]="SelectedRowId"
+  >
 </app-transaction-form>

@@ -16,7 +16,7 @@ export class TransactionsService {
     }
 
     getById(id: number): Observable<DTO_Transactions | null> {
-        return this.base.getOne<DTO_Transactions>(`${this.apiUrl}/${id}`);
+        return this.base.getOne<DTO_Transactions>(`${this.apiUrl}/transaction/${id}`);
     }
 
     create(dto: DTO_Transactions): Observable<DTO_Transactions | null> {
