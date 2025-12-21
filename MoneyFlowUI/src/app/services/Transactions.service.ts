@@ -27,7 +27,7 @@ export class TransactionsService {
         return this.base.put<DTO_Transactions, DTO_Transactions>(`${this.apiUrl}/${id}`, dto);
     }
 
-    delete(id: number): Observable<boolean | null> {
-        return this.base.delete<boolean>(`${this.apiUrl}/${id}`);
+    delete(ids: number[]): Observable<boolean | null> {
+        return this.base.post<number[], boolean>(`${this.apiUrl}/transactions`, ids);
     }
 }

@@ -50,7 +50,7 @@ namespace MoneyFlowAPI.Controllers
         #endregion
 
         #region DELETE
-        [HttpDelete("transactions")]
+        [HttpPost("transactions")]
         public async Task<ActionResult<DTO_ResponseTable<string>>> PostTransaction(List<int> transactions)
         {
             var response = await _transactionService.DeleteTransactionsAsync(transactions);

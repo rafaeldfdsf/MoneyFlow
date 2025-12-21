@@ -6,10 +6,13 @@ import { DTO_Transactions } from '@/shared/dtos/DTO_Transactions';
 import { TransactionsService } from '@/services/Transactions.service';
 import { TableColumnDefinition } from '@/shared/models/table-column.model';
 import { TransactionFormComponent } from '../../form/transaction-form/transaction-form.component';
+import { ConfirmationService } from 'primeng/api';
+import { ConfirmDialog } from "primeng/confirmdialog";
 
 @Component({
   selector: 'app-transactions-list',
-  imports: [Toolbar, Button, GenericTableComponent, TransactionFormComponent],
+  imports: [Toolbar, Button, GenericTableComponent, TransactionFormComponent, ConfirmDialog],
+  providers: [ConfirmationService],
   templateUrl: './transactions-list.component.html',
   styleUrl: './transactions-list.component.scss'
 })
@@ -33,20 +36,24 @@ export class TransactionsListComponent {
     { field: 'description', header: 'Descrição', sortable: true },
     { field: 'amount', header: 'Valor (€)', type: 'currency', sortable: true, align: 'right' },
     { field: 'isIncome', header: 'Tipo', type: 'boolean', sortable: true, width: '100px', align: 'center' },
-    { field: 'transactionDate', header: 'Data', type: 'date', sortable: true, width: '140px' },
-    {
-      field: 'actions',
-      header: 'Ações',
-      align: 'center',
-      width: '120px',
-      actions: [
-        { icon: 'pi pi-pencil', onClick: (row: DTO_Transactions) => this.edit(row) },
-        { icon: 'pi pi-trash', class: 'p-button-danger', onClick: (row: DTO_Transactions) => this.remove(row) }
-      ]
-    }
+    { field: 'transactionDate', header: 'Data', type: 'date', sortable: true, width: '140px' }
+    // {
+    //   field: 'actions',
+    //   header: 'Ações',
+    //   align: 'center',
+    //   width: '120px',
+    //   actions: [
+    //     { icon: 'pi pi-pencil', onClick: (row: DTO_Transactions) => this.edit(row) },
+    //     { icon: 'pi pi-trash', class: 'p-button-danger', onClick: (row: DTO_Transactions) => this.remove(row) }
+    //   ]
+    // }
   ];
 
-  constructor(private transactionsService: TransactionsService, private injectorFactory: Injector) { }
+  constructor(
+    private transactionsService: TransactionsService,
+    private injectorFactory: Injector,
+    private confirmationService: ConfirmationService
+  ) { }
 
   ngOnInit(): void {
     this.loadTransactions();
@@ -116,7 +123,24 @@ export class TransactionsListComponent {
   }
 
   deleteSelectedProducts() {
-
+    this.confirmationService.confirm({
+      header: 'Confirmar Eliminação',
+      message: 'Tem a certeza de que pretende eliminar os itens selecionados?',
+      icon: 'pi pi-exclamation-triangle',
+      acceptLabel: 'Sim',
+      rejectLabel: 'Não',
+      accept: () => {
+        this.transactionsService.delete(this.selectedTransactions.map(i => i.id)).subscribe({
+          next: (data) => {
+            this.loadTransactions();
+            this.selectedTransactions = [];
+          },
+          error: (err) => {
+            console.error('Erro:', err);
+          }
+        });
+      }
+    });
   }
 
   exportCSV() {
@@ -128,7 +152,7 @@ export class TransactionsListComponent {
     this.transactionsService.create(transaction).subscribe({
       next: (data) => {
         if (data) {
-          this.transactions.update(list => [...list, data]);
+          this.loadTransactions();
         }
         this.loading.set(false);
       },
