@@ -8,13 +8,13 @@ namespace MoneyFlowAPI.Mappings
     {
         public TransactionProfile()
         {
-            CreateMap<Transaction, DTO_Transactions>()
+            CreateMap<Categories, DTO_Transactions>()
                 .ForMember(
                     dest => dest.Type,
                     opt => opt.MapFrom(src => src.IsIncome ? "Entrada" : "Saída")
                 );
 
-            CreateMap<DTO_Transactions, Transaction>();
+            CreateMap<DTO_Transactions, Categories>();
         }
     }
 }

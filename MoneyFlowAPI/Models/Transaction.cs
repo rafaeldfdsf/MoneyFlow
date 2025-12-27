@@ -1,6 +1,6 @@
 ﻿namespace MoneyFlowAPI.Models;
 
-public partial class Transaction
+public partial class Categories
 {
     public int Id { get; set; }
 

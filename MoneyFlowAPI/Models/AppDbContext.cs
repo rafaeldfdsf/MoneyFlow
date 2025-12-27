@@ -17,7 +17,7 @@ public partial class AppDbContext : DbContext
 
     public virtual DbSet<Category> Categories { get; set; }
 
-    public virtual DbSet<Transaction> Transactions { get; set; }
+    public virtual DbSet<Categories> Transactions { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
 
@@ -42,7 +42,7 @@ public partial class AppDbContext : DbContext
                 .HasConstraintName("FK_Categories_Users");
         });
 
-        modelBuilder.Entity<Transaction>(entity =>
+        modelBuilder.Entity<Categories>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__Transact__3214EC07355253A3");
 

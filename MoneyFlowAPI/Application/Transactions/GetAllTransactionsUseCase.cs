@@ -9,7 +9,7 @@ namespace MoneyFlowAPI.Application.Transactions
 
         public GetAllTransactionsUseCase(AppDbContext context) => _context = context;
 
-        public async Task<List<Transaction>> ExecuteAsync(int userId)
+        public async Task<List<Models.Categories>> ExecuteAsync(int userId)
         {
             // 🔹 Lógica de negócio e acesso à base de dados
             var transactions = await _context.Transactions

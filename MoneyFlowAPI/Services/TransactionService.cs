@@ -54,7 +54,7 @@ namespace MoneyFlowAPI.Services
         {
             try
             {
-                Transaction? transaction = await _getTransaction.ExecuteAsync(id);
+                Categories? transaction = await _getTransaction.ExecuteAsync(id);
 
                 if (transaction == null)
                     return DTO_ResponseTable<DTO_Transactions>.FailureResult("Nenhuma transação encontrada.");
@@ -79,10 +79,10 @@ namespace MoneyFlowAPI.Services
                     return DTO_ResponseTable<DTO_Transactions>.FailureResult("Dados inválidos.");
 
                 // Mapeia DTO -> Entidade
-                Transaction entity = _mapper.Map<Transaction>(dto);
+                Categories entity = _mapper.Map<Categories>(dto);
 
                 // Executa comando/serviço de atualização
-                Transaction? updated = await _updateTransaction.ExecuteAsync(entity);
+                Categories? updated = await _updateTransaction.ExecuteAsync(entity);
 
                 if (updated == null)
                     return DTO_ResponseTable<DTO_Transactions>.FailureResult("Falha ao atualizar transação.");
@@ -113,10 +113,10 @@ namespace MoneyFlowAPI.Services
                     return DTO_ResponseTable<DTO_Transactions>.FailureResult("Dados inválidos.");
 
                 // Mapeia DTO -> Entidade (usando a entidade correta)
-                Models.Transaction entity = _mapper.Map<Models.Transaction>(dto);
+                Models.Categories entity = _mapper.Map<Models.Categories>(dto);
 
                 // Executa comando/serviço de criação
-                Models.Transaction? created = await _createTransaction.ExecuteAsync(entity, userId);
+                Models.Categories? created = await _createTransaction.ExecuteAsync(entity, userId);
 
                 if (created == null)
                     return DTO_ResponseTable<DTO_Transactions>.FailureResult("Falha ao criar transação.");

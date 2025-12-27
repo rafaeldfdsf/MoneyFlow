@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using MoneyFlowAPI.Application.Categories;
 using MoneyFlowAPI.Application.Transactions;
 using MoneyFlowAPI.Mappings;
 using MoneyFlowAPI.Models;
@@ -37,6 +38,14 @@ builder.Services.AddScoped<GetTransactionUseCase>();
 builder.Services.AddScoped<CreateTransactionUseCase>();
 builder.Services.AddScoped<DeleteTransactionUseCase>();
 builder.Services.AddScoped<UpdateTransactionUseCase>();
+
+// Categories
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<GetAllCategories>();
+builder.Services.AddScoped<GetCategory>();
+builder.Services.AddScoped<CreateCategory>();
+builder.Services.AddScoped<DeleteCategory>();
+builder.Services.AddScoped<UpdateCategory>();
 #endregion
 
 // Configurar JWT
