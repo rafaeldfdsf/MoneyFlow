@@ -1,0 +1,37 @@
+<p-toolbar styleClass="mb-6">
+  <ng-template #start>
+    <p-button label="Nova" icon="pi pi-plus" severity="secondary" class="mr-2" (onClick)="openNew()" />
+    <p-button label="Eliminar" icon="pi pi-trash" severity="secondary" [disabled]="selectedCategories.length === 0" outlined (onClick)="deleteSelectedProducts()" />
+  </ng-template>
+</p-toolbar>
+
+<app-generic-table
+    [title]="'Categorias'"
+    [data]="categories()"
+    [columns]="columns"
+    [paginator]="true"
+    [showCheckbox]="true"
+    [rows]="5"
+    [loading]="loading()"
+    (rowClick)="onRowClick($event)"
+    (selectionChange)="onSelectionChange($event)">
+    <!-- Custom header -->
+    <ng-template #headerTemplate>
+    <div class="flex justify-between items-center mb-3">
+        <h2>Categorias</h2>
+    </div>
+    </ng-template>
+</app-generic-table>
+
+
+<app-categories-form
+  [(visible)]="dialogVisible"
+  [model]="selectedCategory"
+  [isEdit]="isEdit"
+  (saveTransaction)="loadCategories()"
+  [idObject]="SelectedRowId"
+  >
+</app-categories-form>
+
+<p-confirmDialog></p-confirmDialog>
+<p-toast></p-toast>

@@ -35,7 +35,8 @@ export class AppMenu {
             {
                 label: 'Movimentos',
                 items: [
-                    { label: 'Transações', icon: 'pi pi-fw pi-id-card', routerLink: ['/transactions'] }
+                    { label: 'Transações', icon: 'pi pi-fw pi-id-card', routerLink: ['/transactions'] },
+                    { label: 'Categorias', icon: 'pi pi-fw pi-id-card', routerLink: ['/categories'] }
                 ]
             },
             {

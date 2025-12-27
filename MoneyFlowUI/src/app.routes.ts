@@ -14,7 +14,8 @@ export const appRoutes: Routes = [
             { path: 'uikit', loadChildren: () => import('./app/pages/uikit/uikit.routes') },
             { path: 'documentation', component: Documentation },
             { path: 'pages', loadChildren: () => import('./app/pages/pages.routes') },
-            { path: 'transactions', loadChildren: () => import('./app/pages/transactions/transactions.routes') }
+            { path: 'transactions', loadChildren: () => import('./app/pages/transactions/transactions.routes') },
+            { path: 'categories', loadChildren: () => import('./app/pages/categories/categories.routes') }
         ]
     },
     { path: 'landing', component: Landing },

@@ -46,7 +46,7 @@ namespace MoneyFlowAPI.Services
             }
             catch (Exception ex)
             {
-                return DTO_ResponseTable<List<DTO_Transactions>>.FailureResult($"Erro ao obter transações: {ex.Message}");
+                return DTO_ResponseTable<List<DTO_Transactions>>.FailureResult($"Erro ao obter transações: {ex.Message}"); 
             }
         }
 
