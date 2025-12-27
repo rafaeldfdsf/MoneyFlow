@@ -13,11 +13,14 @@ namespace MoneyFlowShared.DTOs
 
         public bool IsIncome { get; set; }
 
+        public string Type { get; set; } = "";
+
         public decimal Amount { get; set; }
 
         public string? Description { get; set; }
 
-        public DateTime TransactionDate { get; set; }
+        public DateTime TransactionDate { get; set; } = DateTime.Today;
+        public DateTime TransactionDate1 { get; set; } = DateTime.Today;
 
         public DateTime? CreatedAt { get; set; }
 

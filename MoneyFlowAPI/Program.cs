@@ -6,9 +6,13 @@ using MoneyFlowAPI.Mappings;
 using MoneyFlowAPI.Models;
 using MoneyFlowAPI.Services;
 using MoneyFlowAPI.Services.Interfaces;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+
+JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
 // Add Controllers (para Swagger e APIs baseadas em controllers)
 builder.Services.AddControllers();
@@ -32,6 +36,7 @@ builder.Services.AddScoped<GetAllTransactionsUseCase>();
 builder.Services.AddScoped<GetTransactionUseCase>();
 builder.Services.AddScoped<CreateTransactionUseCase>();
 builder.Services.AddScoped<DeleteTransactionUseCase>();
+builder.Services.AddScoped<UpdateTransactionUseCase>();
 #endregion
 
 // Configurar JWT
@@ -48,7 +53,10 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateIssuerSigningKey = true,
             ValidIssuer = builder.Configuration["Jwt:Issuer"],
             ValidAudience = builder.Configuration["Jwt:Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(key)
+            IssuerSigningKey = new SymmetricSecurityKey(key),
+
+            NameClaimType = ClaimTypes.Name,
+            RoleClaimType = ClaimTypes.Role
         };
     });
 

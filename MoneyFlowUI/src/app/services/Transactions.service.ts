@@ -23,8 +23,8 @@ export class TransactionsService {
         return this.base.post<DTO_Transactions, DTO_Transactions>(`${this.apiUrl}/transaction`, dto);
     }
 
-    update(id: number, dto: DTO_Transactions): Observable<DTO_Transactions | null> {
-        return this.base.put<DTO_Transactions, DTO_Transactions>(`${this.apiUrl}/${id}`, dto);
+    update(dto: DTO_Transactions): Observable<DTO_Transactions | null> {
+        return this.base.put<DTO_Transactions, DTO_Transactions>(`${this.apiUrl}/transaction`, dto);
     }
 
     delete(ids: number[]): Observable<boolean | null> {

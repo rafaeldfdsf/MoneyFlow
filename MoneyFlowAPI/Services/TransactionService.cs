@@ -12,27 +12,30 @@ namespace MoneyFlowAPI.Services
         private readonly GetTransactionUseCase _getTransaction;
         private readonly CreateTransactionUseCase _createTransaction;
         private readonly DeleteTransactionUseCase _deleteTransactions;
+        private readonly UpdateTransactionUseCase _updateTransaction;
         private readonly IMapper _mapper;
 
         public TransactionService(GetAllTransactionsUseCase getAllTransactions,
                                   GetTransactionUseCase getTransaction,
                                   CreateTransactionUseCase createTransaction,
                                   DeleteTransactionUseCase deleteTransaction,
+                                  UpdateTransactionUseCase updateTransaction,
                                   IMapper mapper)
         {
             _getAllTransactions = getAllTransactions;
             _getTransaction = getTransaction;
             _createTransaction = createTransaction;
             _deleteTransactions = deleteTransaction;
+            _updateTransaction = updateTransaction;
             _mapper = mapper;
         }
 
         #region GET
-        public async Task<DTO_ResponseTable<List<DTO_Transactions>>> GetAllTransactionsAsync()
+        public async Task<DTO_ResponseTable<List<DTO_Transactions>>> GetAllTransactionsAsync(int userId)
         {
             try
             {
-                var transactions = await _getAllTransactions.ExecuteAsync();
+                var transactions = await _getAllTransactions.ExecuteAsync(userId);
 
                 if (transactions == null || !transactions.Any())
                     return DTO_ResponseTable<List<DTO_Transactions>>.FailureResult("Nenhuma transação encontrada.");
@@ -67,8 +70,42 @@ namespace MoneyFlowAPI.Services
         }
         #endregion
 
+        #region PUT
+        public async Task<DTO_ResponseTable<DTO_Transactions>> UpdateTransactionAsync(DTO_Transactions dto)
+        {
+            try
+            {
+                if (dto == null)
+                    return DTO_ResponseTable<DTO_Transactions>.FailureResult("Dados inválidos.");
+
+                // Mapeia DTO -> Entidade
+                Transaction entity = _mapper.Map<Transaction>(dto);
+
+                // Executa comando/serviço de atualização
+                Transaction? updated = await _updateTransaction.ExecuteAsync(entity);
+
+                if (updated == null)
+                    return DTO_ResponseTable<DTO_Transactions>.FailureResult("Falha ao atualizar transação.");
+
+                // Mapeia Entidade -> DTO para retorno
+                var updatedDto = _mapper.Map<DTO_Transactions>(updated);
+
+                return DTO_ResponseTable<DTO_Transactions>.SuccessResult(
+                    updatedDto,
+                    "Transação atualizada com sucesso."
+                );
+            }
+            catch (Exception ex)
+            {
+                return DTO_ResponseTable<DTO_Transactions>.FailureResult(
+                    $"Erro ao atualizar transação: {ex.Message}"
+                );
+            }
+        }
+        #endregion
+
         #region POST
-        public async Task<DTO_ResponseTable<DTO_Transactions>> CreateTransactionAsync(DTO_Transactions dto)
+        public async Task<DTO_ResponseTable<DTO_Transactions>> CreateTransactionAsync(DTO_Transactions dto, int userId)
         {
             try
             {
@@ -79,7 +116,7 @@ namespace MoneyFlowAPI.Services
                 Models.Transaction entity = _mapper.Map<Models.Transaction>(dto);
 
                 // Executa comando/serviço de criação
-                Models.Transaction? created = await _createTransaction.ExecuteAsync(entity);
+                Models.Transaction? created = await _createTransaction.ExecuteAsync(entity, userId);
 
                 if (created == null)
                     return DTO_ResponseTable<DTO_Transactions>.FailureResult("Falha ao criar transação.");

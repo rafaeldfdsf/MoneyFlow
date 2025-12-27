@@ -19,7 +19,6 @@
     <ng-template #headerTemplate>
     <div class="flex justify-between items-center mb-3">
         <h2>Transações</h2>
-        <button pButton label="Editar Transação" icon="pi pi-plus" (click)="openEdit()"></button>
     </div>
     </ng-template>
 </app-generic-table>
@@ -29,9 +28,22 @@
   [(visible)]="dialogVisible"
   [model]="selectedTransaction"
   [isEdit]="isEdit"
-  (saveTransaction)="onSave($event)"
+  (saveTransaction)="loadTransactions()"
   [idObject]="SelectedRowId"
   >
 </app-transaction-form>
 
+<ng-template #amountTemplate let-row>
+  <span
+    [style.color]="row.isIncome ? '#2e7d32' : '#d32f2f'"
+    style="font-weight: 600 !important; color: inherit"
+    [ngStyle]="{
+      color: row.isIncome ? '#2e7d32 !important' : '#d32f2f !important'
+    }"
+    >
+    {{ row.amount }}
+  </span>
+</ng-template>
+
 <p-confirmDialog></p-confirmDialog>
+<p-toast></p-toast>

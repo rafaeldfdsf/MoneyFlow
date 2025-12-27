@@ -9,56 +9,78 @@
 
 <!-- Conteúdo do formulário -->
 <ng-template #formContent>
-  <div class="p-fluid grid gap-3">
+  <form #form="ngForm" class="p-fluid grid gap-3" (ngModelChange)="isFormValid = !!form.valid">
+    <div class="p-fluid grid gap-3">
 
-    <!-- Descrição -->
-    <div class="p-field p-col-12">
-      <label class="p-mb-2 font-medium">Descrição</label>
-      <input
-        pInputText
-        class="w-full"
-        placeholder="Ex: Pagamento da renda"
-        [(ngModel)]="model.description"
-      />
+      <!-- Descrição -->
+      <div class="p-field p-col-12">
+        <label class="p-mb-2 font-medium">Descrição <span class="required">*</span></label>
+        <input
+          pInputText
+          class="w-full"
+          placeholder="Ex: Pagamento da renda"
+          [(ngModel)]="model.description"
+          name="description"
+          #description="ngModel"
+          required
+        />
+
+        @if (description.invalid && (description.touched || isSubmitted)) {
+          <small class="p-error" style="color: #d32f2f;">Campo obrigatório</small>
+        }
+      </div>
+
+      <!-- Valor -->
+      <div class="p-field p-col-12 p-md-6">
+        <label class="p-mb-2 font-medium">Valor (€) <span class="required">*</span></label>
+        <input
+          pInputText
+          type="number"
+          class="w-full"
+          placeholder="0.00"
+          [(ngModel)]="model.amount"
+          name="amount"
+          #amount="ngModel"
+          required
+        />
+
+        @if (amount.invalid && (amount.touched || isSubmitted)) {
+          <small class="p-error" style="color: #d32f2f;">Campo obrigatório</small>
+        }
+      </div>
+
+      <!-- Tipo -->
+      <div class="p-field p-col-12 p-md-6">
+        <label class="p-mb-2 font-medium">Tipo <span class="required">*</span></label>
+        <p-select
+          class="w-full"
+          [options]="types"
+          optionLabel="label"
+          optionValue="value"
+          placeholder="Selecione"
+          [(ngModel)]="model.isIncome"
+          required
+          name="isIncome"
+          #type="ngModel"
+        ></p-select>
+
+        @if (type.invalid && (type.touched || isSubmitted)) {
+          <small class="p-error" style="color: #d32f2f;">Campo obrigatório</small>
+        }
+      </div>
+
+      <!-- Data -->
+      <div class="p-field p-col-12">
+        <label class="p-mb-2 font-medium">Data</label>
+        <input
+          pInputText
+          type="date"
+          class="w-full"
+          [(ngModel)]="model.transactionDate"
+        />
+      </div>
     </div>
-
-    <!-- Valor -->
-    <div class="p-field p-col-12 p-md-6">
-      <label class="p-mb-2 font-medium">Valor (€)</label>
-      <input
-        pInputText
-        type="number"
-        class="w-full"
-        placeholder="0.00"
-        [(ngModel)]="model.amount"
-      />
-    </div>
-
-    <!-- Tipo -->
-    <div class="p-field p-col-12 p-md-6">
-      <label class="p-mb-2 font-medium">Tipo</label>
-      <p-select
-        class="w-full"
-        [options]="types"
-        optionLabel="label"
-        optionValue="value"
-        placeholder="Selecione"
-        [(ngModel)]="model.isIncome"
-      ></p-select>
-    </div>
-
-    <!-- Data -->
-    <div class="p-field p-col-12">
-      <label class="p-mb-2 font-medium">Data</label>
-      <input
-        pInputText
-        type="date"
-        class="w-full"
-        [(ngModel)]="model.transactionDate"
-      />
-    </div>
-
-  </div>
+  </form>
 </ng-template>
 
 <!-- Footer -->

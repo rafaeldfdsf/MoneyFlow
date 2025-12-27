@@ -8,15 +8,13 @@ namespace MoneyFlowAPI.Application.Transactions
 
         public CreateTransactionUseCase(AppDbContext context) => _context = context;
 
-        public async Task<Transaction?> ExecuteAsync(Transaction transaction)
+        public async Task<Transaction?> ExecuteAsync(Transaction transaction, int userId)
         {
             if (transaction == null)
                 return null;
 
             transaction.CreatedAt ??= DateTime.UtcNow;
-
-            //TODO: Alterar o id pelo utilizador logado
-            transaction.UserId = 1;
+            transaction.UserId = userId;
 
             _context.Transactions.Add(transaction);
             await _context.SaveChangesAsync();

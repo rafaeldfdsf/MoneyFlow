@@ -6,7 +6,7 @@ namespace MoneyFlowAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TransactionsController : ControllerBase
+    public class TransactionsController : BaseController
     {
         private readonly ITransactionService _transactionService;
 
@@ -16,7 +16,7 @@ namespace MoneyFlowAPI.Controllers
         [HttpGet("transactions")]
         public async Task<ActionResult<DTO_ResponseTable<List<DTO_Transactions>>>> GetAll()
         {
-            var response = await _transactionService.GetAllTransactionsAsync();
+            var response = await _transactionService.GetAllTransactionsAsync(UserId);
 
             if (!response.Success)
                 return BadRequest(response);
@@ -36,11 +36,24 @@ namespace MoneyFlowAPI.Controllers
         }
         #endregion
 
+        #region PUT
+        [HttpPut("transaction")]
+        public async Task<ActionResult<DTO_ResponseTable<DTO_Transactions>>> PutTransaction(DTO_Transactions transaction)
+        {
+            var response = await _transactionService.UpdateTransactionAsync(transaction);
+
+            if (!response.Success)
+                return BadRequest(response);
+
+            return Ok(response);
+        }
+        #endregion
+
         #region POST
         [HttpPost("transaction")]
         public async Task<ActionResult<DTO_ResponseTable<DTO_Transactions>>> PostTransaction(DTO_Transactions transaction)
         {
-            var response = await _transactionService.CreateTransactionAsync(transaction);
+            var response = await _transactionService.CreateTransactionAsync(transaction, UserId);
 
             if (!response.Success)
                 return BadRequest(response);

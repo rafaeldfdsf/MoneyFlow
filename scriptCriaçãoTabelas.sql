@@ -48,3 +48,26 @@ CREATE TABLE [dbo].[Transactions] (
         REFERENCES [dbo].[Categories]([Id])
         ON DELETE SET NULL
 );
+
+-- ========================================================================================================================================================================
+-- Tabela responsável por armazenar e manter o saldo financeiro atual de cada utilizador, atualizado de forma incremental com base nas transações de entradas e saídas.
+-- ========================================================================================================================================================================
+CREATE TABLE [dbo].[UserBalances] 
+(
+    Id INT IDENTITY(1,1) NOT NULL,
+    UserId INT NOT NULL,
+    CurrentBalance DECIMAL(18,2) NOT NULL 
+        CONSTRAINT DF_UserBalances_CurrentBalance DEFAULT (0),
+    UpdatedAt DATETIME2 NOT NULL 
+        CONSTRAINT DF_UserBalances_UpdatedAt DEFAULT (SYSDATETIME()),
+
+    CONSTRAINT PK_UserBalances PRIMARY KEY (Id),
+    CONSTRAINT UQ_UserBalances_User UNIQUE (UserId),
+
+    CONSTRAINT FK_UserBalances_Users
+        FOREIGN KEY (UserId)
+        REFERENCES [dbo].[Users](Id)
+        ON DELETE CASCADE
+);
+
+
