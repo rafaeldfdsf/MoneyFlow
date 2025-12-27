@@ -14,7 +14,6 @@ export class DTO_Transactions {
     amount: number;
     description: string;
     transactionDate: Date = new Date("2025-12-27T00:00:00.0000000+00:00");
-    transactionDate1: Date = new Date("2025-12-27T00:00:00.0000000+00:00");
     createdAt: Date;
     category: DTO_Category;
 }

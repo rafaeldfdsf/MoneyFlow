@@ -20,7 +20,6 @@ namespace MoneyFlowShared.DTOs
         public string? Description { get; set; }
 
         public DateTime TransactionDate { get; set; } = DateTime.Today;
-        public DateTime TransactionDate1 { get; set; } = DateTime.Today;
 
         public DateTime? CreatedAt { get; set; }
 

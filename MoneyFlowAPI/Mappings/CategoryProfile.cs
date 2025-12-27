@@ -8,8 +8,13 @@ namespace MoneyFlowAPI.Mappings
     {
         public CategoryProfile()
         {
-            CreateMap<Category, DTO_Category>();
-            CreateMap<DTO_Category, Category>();
+            CreateMap<Category, DTO_Category>()
+            .ForSourceMember(src => src.Transactions, opt => opt.DoNotValidate())
+            .ForSourceMember(src => src.User, opt => opt.DoNotValidate());
+
+            CreateMap<DTO_Category, Category>()
+                .ForMember(dest => dest.Transactions, opt => opt.Ignore())
+                .ForMember(dest => dest.User, opt => opt.Ignore());
         }
     }
 }
