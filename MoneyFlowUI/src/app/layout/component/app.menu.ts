@@ -33,10 +33,10 @@ export class AppMenu {
                 items: [{ label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/'] }]
             },
             {
-                label: 'Movimentos',
+                label: 'Gestão',
                 items: [
-                    { label: 'Transações', icon: 'pi pi-fw pi-id-card', routerLink: ['/transactions'] },
-                    { label: 'Categorias', icon: 'pi pi-fw pi-id-card', routerLink: ['/categories'] }
+                    { label: 'Movimentos/Transações', icon: 'pi pi-fw pi-arrow-right-arrow-left', routerLink: ['/transactions'] },
+                    { label: 'Categorias', icon: 'pi pi-fw pi-tags', routerLink: ['/categories'] }
                 ]
             },
             {
