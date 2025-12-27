@@ -9,7 +9,7 @@ namespace MoneyFlowAPI.Application.Transactions
 
         public GetTransactionUseCase(AppDbContext context) => _context = context;
 
-        public async Task<Models.Categories?> ExecuteAsync(int id)
+        public async Task<Transaction?> ExecuteAsync(int id)
         {
             if (id <= 0)
                 return null;
