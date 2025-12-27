@@ -1,6 +1,9 @@
-﻿namespace MoneyFlowAPI.Models;
+﻿using System;
+using System.Collections.Generic;
 
-public partial class Categories
+namespace MoneyFlowAPI.Models;
+
+public partial class Transaction
 {
     public int Id { get; set; }
 
@@ -14,7 +17,7 @@ public partial class Categories
 
     public string? Description { get; set; }
 
-    public DateTime TransactionDate { get; set; }
+    public DateOnly TransactionDate { get; set; }
 
     public DateTime? CreatedAt { get; set; }
 

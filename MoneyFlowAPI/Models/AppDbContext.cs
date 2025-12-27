@@ -17,9 +17,11 @@ public partial class AppDbContext : DbContext
 
     public virtual DbSet<Category> Categories { get; set; }
 
-    public virtual DbSet<Categories> Transactions { get; set; }
+    public virtual DbSet<Transaction> Transactions { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
+
+    public virtual DbSet<UserBalance> UserBalances { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
@@ -42,7 +44,7 @@ public partial class AppDbContext : DbContext
                 .HasConstraintName("FK_Categories_Users");
         });
 
-        modelBuilder.Entity<Categories>(entity =>
+        modelBuilder.Entity<Transaction>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__Transact__3214EC07355253A3");
 
@@ -71,6 +73,18 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.Email).HasMaxLength(150);
             entity.Property(e => e.Name).HasMaxLength(100);
             entity.Property(e => e.PasswordHash).HasMaxLength(255);
+        });
+
+        modelBuilder.Entity<UserBalance>(entity =>
+        {
+            entity.HasIndex(e => e.UserId, "UQ_UserBalances_User").IsUnique();
+
+            entity.Property(e => e.CurrentBalance).HasColumnType("decimal(18, 2)");
+            entity.Property(e => e.UpdatedAt).HasDefaultValueSql("(sysdatetime())");
+
+            entity.HasOne(d => d.User).WithOne(p => p.UserBalance)
+                .HasForeignKey<UserBalance>(d => d.UserId)
+                .HasConstraintName("FK_UserBalances_Users");
         });
 
         OnModelCreatingPartial(modelBuilder);
