@@ -7,6 +7,8 @@ import { GenericDialogComponent } from '@/shared/components/generic-dialog/gener
 import { DTO_Transactions } from '@/shared/dtos/DTO_Transactions';
 import { TransactionsService } from '@/services/Transactions.service';
 import { ToastService } from '@/shared/services/toast.service';
+import { GenericSelectComponent } from "@/shared/components/generic-select/generic-select.component";
+import { environment } from 'src/environment.development';
 
 @Component({
   selector: 'app-transaction-form',
@@ -18,7 +20,8 @@ import { ToastService } from '@/shared/services/toast.service';
     InputText,
     Button,
     Select,
-    GenericDialogComponent
+    GenericDialogComponent,
+    GenericSelectComponent
   ]
 })
 export class TransactionFormComponent {
@@ -41,6 +44,8 @@ export class TransactionFormComponent {
   // Evento emitido após criar ou atualizar uma transação com sucesso
   @Output() saveTransaction = new EventEmitter();
 
+  categoryUrl = `${environment.apiUrl}/Category/categories`;
+
   isFormValid = false;
   isSubmitted = false;
 
@@ -51,7 +56,7 @@ export class TransactionFormComponent {
   ];
 
   constructor(
-    private transactionsService: TransactionsService,
+    public transactionsService: TransactionsService,
     private toast: ToastService
   ) { }
 

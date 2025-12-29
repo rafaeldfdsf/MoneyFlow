@@ -29,6 +29,16 @@ namespace MoneyFlowAPI.Services
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
+            var userBalance = new UserBalance
+            {
+                UserId = user.Id,
+                CurrentBalance = 0m,
+                UpdatedAt = DateTime.UtcNow
+            };
+
+            _context.UserBalances.Add(userBalance);
+            await _context.SaveChangesAsync();
+
             return null;
         }
 

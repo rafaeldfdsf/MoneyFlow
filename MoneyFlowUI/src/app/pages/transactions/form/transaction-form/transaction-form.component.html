@@ -49,6 +49,21 @@
         }
       </div>
 
+      <!-- Categoria -->
+      <div class="p-field p-col-12 p-md-6">
+        <label class="p-mb-2 font-medium">Categoria <span class="required">*</span></label>
+        <app-generic-select
+          [apiUrl]="categoryUrl"
+          optionLabel="name"
+          optionValue="id"
+          [(value)]="model.categoryId">
+        </app-generic-select>
+
+        <!-- @if (categoryId.invalid && (categoryId.touched || isSubmitted)) {
+          <small class="p-error" style="color: #d32f2f;">Campo obrigatório</small>
+        } -->
+      </div>
+
       <!-- Tipo -->
       <div class="p-field p-col-12 p-md-6">
         <label class="p-mb-2 font-medium">Tipo <span class="required">*</span></label>
