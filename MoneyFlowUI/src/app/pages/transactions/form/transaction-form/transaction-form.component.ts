@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
+import { Component, Input, Output, EventEmitter, SimpleChanges, ViewChild } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { InputText } from 'primeng/inputtext';
 import { Button } from 'primeng/button';
@@ -43,6 +43,8 @@ export class TransactionFormComponent {
 
   // Evento emitido após criar ou atualizar uma transação com sucesso
   @Output() saveTransaction = new EventEmitter();
+
+  @ViewChild(NgForm) form!: NgForm;
 
   categoryUrl = `${environment.apiUrl}/Category/categories`;
 
@@ -125,7 +127,7 @@ export class TransactionFormComponent {
    */
   save() {
     this.isSubmitted = true;
-    if (!this.isFormValid) {
+    if (!this.form || this.form.invalid) {
       this.toast.error('Preencha todos os campos obrigatórios');
       return;
     }

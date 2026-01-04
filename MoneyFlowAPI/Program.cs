@@ -50,6 +50,9 @@ builder.Services.AddScoped<GetCategory>();
 builder.Services.AddScoped<CreateCategory>();
 builder.Services.AddScoped<DeleteCategory>();
 builder.Services.AddScoped<UpdateCategory>();
+
+// User Balance
+builder.Services.AddScoped<IUserBalanceService, UserBalanceService>();
 #endregion
 
 // Configurar JWT

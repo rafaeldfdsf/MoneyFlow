@@ -1,8 +1,9 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using MoneyFlowAPI.Application.Transactions;
+using MoneyFlowAPI.Models;
 using MoneyFlowAPI.Services.Interfaces;
 using MoneyFlowShared.DTOs;
-using MoneyFlowAPI.Models;
 
 namespace MoneyFlowAPI.Services
 {
@@ -13,6 +14,8 @@ namespace MoneyFlowAPI.Services
         private readonly CreateTransactionUseCase _createTransaction;
         private readonly DeleteTransactionUseCase _deleteTransactions;
         private readonly UpdateTransactionUseCase _updateTransaction;
+        private readonly IUserBalanceService _userBalanceService;
+        private readonly AppDbContext _context;
         private readonly IMapper _mapper;
 
         public TransactionService(GetAllTransactionsUseCase getAllTransactions,
@@ -20,6 +23,8 @@ namespace MoneyFlowAPI.Services
                                   CreateTransactionUseCase createTransaction,
                                   DeleteTransactionUseCase deleteTransaction,
                                   UpdateTransactionUseCase updateTransaction,
+                                  IUserBalanceService userBalanceService,
+                                  AppDbContext context,
                                   IMapper mapper)
         {
             _getAllTransactions = getAllTransactions;
@@ -27,6 +32,8 @@ namespace MoneyFlowAPI.Services
             _createTransaction = createTransaction;
             _deleteTransactions = deleteTransaction;
             _updateTransaction = updateTransaction;
+            _userBalanceService = userBalanceService;
+            _context = context;
             _mapper = mapper;
         }
 
@@ -107,19 +114,25 @@ namespace MoneyFlowAPI.Services
         #region POST
         public async Task<DTO_ResponseTable<DTO_Transactions>> CreateTransactionAsync(DTO_Transactions dto, int userId)
         {
-            try
-            {
                 if (dto == null)
                     return DTO_ResponseTable<DTO_Transactions>.FailureResult("Dados inválidos.");
 
+            using var dbTransaction = await _context.Database.BeginTransactionAsync();
+
+            try
+            {
                 // Mapeia DTO -> Entidade (usando a entidade correta)
                 Transaction entity = _mapper.Map<Transaction>(dto);
 
                 // Executa comando/serviço de criação
                 Transaction? created = await _createTransaction.ExecuteAsync(entity, userId);
-
                 if (created == null)
                     return DTO_ResponseTable<DTO_Transactions>.FailureResult("Falha ao criar transação.");
+
+                // Atualiza saldo do utilizador após a criação da transação
+                await _userBalanceService.UpdateUserBalanceAsync(userId, created);
+
+                await dbTransaction.CommitAsync();
 
                 // Mapeia Entidade -> DTO para retorno
                 var createdDto = _mapper.Map<DTO_Transactions>(created);
@@ -131,9 +144,8 @@ namespace MoneyFlowAPI.Services
             }
             catch (Exception ex)
             {
-                return DTO_ResponseTable<DTO_Transactions>.FailureResult(
-                    $"Erro ao criar transação: {ex.Message}"
-                );
+                await dbTransaction.RollbackAsync();
+                return DTO_ResponseTable<DTO_Transactions>.FailureResult($"Erro ao criar transação: {ex.Message}");
             }
         }
         #endregion

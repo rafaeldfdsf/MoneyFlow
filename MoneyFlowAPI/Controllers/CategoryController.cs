@@ -34,6 +34,24 @@ namespace MoneyFlowAPI.Controllers
 
             return Ok(response);
         }
+
+        [HttpGet("select")]
+        public async Task<ActionResult<IEnumerable<DTO_SelectOption>>> GetForSelect()
+        {
+            var categories = await _categoryService.GetAllCategoriesAsync(UserId);
+
+            if (!categories.Success || categories.Data == null)
+                return Ok(Array.Empty<DTO_SelectOption>());
+
+            var result = categories.Data.Select(c => new DTO_SelectOption
+            {
+                Value = c.Id,
+                Label = c.Name
+            });
+
+            return Ok(result);
+        }
+
         #endregion
 
         #region PUT

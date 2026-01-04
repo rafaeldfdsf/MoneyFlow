@@ -1,17 +1,19 @@
 <div>
     @if (label) {
-        <label class="block font-bold mb-3">
+        <label class="p-mb-2 font-medium">
           {{ label }}
+          <span class="required">*</span>
         </label>
     }
 
     <p-select
-    [options]="options()"
-    optionLabel="label"
-    optionValue="value"
-    [(ngModel)]="value"
-    (ngModelChange)="valueChange.emit($event)"
-    [loading]="loading()"
+    class="w-full"
+    [options]="options"
+    [optionLabel]="optionLabel"
+    [optionValue]="optionValue"
+    [loading]="loading"
+    [ngModel]="value"
+    (ngModelChange)="setValue($event)"
     fluid>
-    </p-select>
+  </p-select>
 </div>

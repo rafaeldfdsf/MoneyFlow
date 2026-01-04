@@ -1,65 +1,85 @@
-import { BaseHttpService } from '@/services/base-http.service';
-import { DTO_SelectOption } from '@/shared/dtos/DTO_SelectOption';
 import { HttpClient } from '@angular/common/http';
-import { Component, EventEmitter, inject, Input, OnInit, Output, signal } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { SelectModule } from 'primeng/select';
-import { map, Observable } from 'rxjs';
+import { Component, forwardRef, Input, OnInit } from '@angular/core';
+import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { SelectModule } from "primeng/select";
 
 @Component({
     selector: 'app-generic-select',
     standalone: true,
     imports: [FormsModule, SelectModule],
-    templateUrl: './generic-select.component.html'
+    templateUrl: './generic-select.component.html',
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => GenericSelectComponent),
+            multi: true
+        }
+    ]
 })
 
-export class GenericSelectComponent<T = any> implements OnInit {
-    private baseHttp = inject(BaseHttpService);
-
-    // UI
+export class GenericSelectComponent implements ControlValueAccessor, OnInit {
+    /** Texto do label */
     @Input() label?: string;
-    @Input() placeholder = 'Select';
 
-    // API
-    @Input() apiUrl!: string;
+    /** URL da API */
+    @Input({ required: true }) apiUrl!: string;
 
-    // Mapping
-    @Input({ required: true }) optionLabel!: string;
-    @Input({ required: true }) optionValue!: string;
+    /** Propriedade para mostrar */
+    @Input() optionLabel: string = 'label';
 
-    // Value (two-way binding)
-    @Input() value!: any;
-    @Output() valueChange = new EventEmitter<any>();
+    /** Propriedade do valor */
+    @Input() optionValue: string = 'value';
 
-    // State
-    options = signal<DTO_SelectOption[]>([]);
-    loading = signal(false);
+    /** Estado de loading */
+    loading = false;
+
+    /** Opções carregadas da API */
+    options: any[] = [];
+
+    /** Valor interno */
+    value: any = null;
+
+    /** Callbacks Angular Forms */
+    private onChange = (_: any) => { };
+    private onTouched = () => { };
+
+    constructor(private http: HttpClient) { }
 
     ngOnInit(): void {
-        if (!this.apiUrl) {
-            console.error('GenericSelect: apiUrl é obrigatório');
-            return;
-        }
-
-        this.loadData();
+        this.loadOptions();
     }
 
-    private loadData(): void {
-        this.loading.set(true);
+    /** Carregar dados da API */
+    loadOptions(): void {
+        this.loading = true;
 
-        this.baseHttp.getList<any>(this.apiUrl).pipe(
-            map(data =>
-                data.map(item => ({
-                    value: item[this.optionValue],
-                    label: item[this.optionLabel]
-                }))
-            )
-        ).subscribe({
-            next: (options) => {
-                this.options.set(options);
-                this.loading.set(false);
+        this.http.get<any[]>(this.apiUrl).subscribe({
+            next: data => {
+                this.options = data;
+                this.loading = false;
             },
-            error: () => this.loading.set(false)
+            error: () => {
+                this.loading = false;
+            }
         });
+    }
+
+    /** ControlValueAccessor */
+    writeValue(value: any): void {
+        this.value = value;
+    }
+
+    registerOnChange(fn: any): void {
+        this.onChange = fn;
+    }
+
+    registerOnTouched(fn: any): void {
+        this.onTouched = fn;
+    }
+
+    setValue(value: any): void {
+        this.value = value;
+        this.onChange(value);
+        this.onTouched();
     }
 }

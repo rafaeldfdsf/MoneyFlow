@@ -9,7 +9,7 @@
 
 <!-- Conteúdo do formulário -->
 <ng-template #formContent>
-  <form #form="ngForm" class="p-fluid grid gap-3" (ngModelChange)="isFormValid = !!form.valid">
+  <form #form="ngForm" class="p-fluid grid gap-3">
     <div class="p-fluid grid gap-3">
 
       <!-- Descrição -->
@@ -51,17 +51,18 @@
 
       <!-- Categoria -->
       <div class="p-field p-col-12 p-md-6">
-        <label class="p-mb-2 font-medium">Categoria <span class="required">*</span></label>
         <app-generic-select
-          [apiUrl]="categoryUrl"
-          optionLabel="name"
-          optionValue="id"
-          [(value)]="model.categoryId">
+          label="Categoria"
+          apiUrl="https://localhost:7085/api/Category/select"
+          [(ngModel)]="model.categoryId"
+          name="categoryId"
+          required
+          #categoryId="ngModel">
         </app-generic-select>
 
-        <!-- @if (categoryId.invalid && (categoryId.touched || isSubmitted)) {
-          <small class="p-error" style="color: #d32f2f;">Campo obrigatório</small>
-        } -->
+        @if (categoryId.invalid && (categoryId.touched || isSubmitted)) {
+          <small class="p-error">Campo obrigatório</small>
+        }
       </div>
 
       <!-- Tipo -->
