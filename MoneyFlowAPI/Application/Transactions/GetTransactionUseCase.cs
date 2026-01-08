@@ -19,5 +19,17 @@ namespace MoneyFlowAPI.Application.Transactions
 
             return transaction;
         }
+
+        public async Task<List<Transaction>?> ExecuteAsyncIds(List<int> ids)
+        {
+            if (ids.Count <= 0)
+                return null;
+
+            List<Transaction>? transactions = await _context.Transactions
+                .Where(t => ids.Contains(t.Id))
+                .ToListAsync();
+
+            return transactions;
+        }
     }
 }

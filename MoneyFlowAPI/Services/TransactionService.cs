@@ -4,6 +4,7 @@ using MoneyFlowAPI.Application.Transactions;
 using MoneyFlowAPI.Models;
 using MoneyFlowAPI.Services.Interfaces;
 using MoneyFlowShared.DTOs;
+using System.Data.Common;
 
 namespace MoneyFlowAPI.Services
 {
@@ -78,24 +79,51 @@ namespace MoneyFlowAPI.Services
         #endregion
 
         #region PUT
-        public async Task<DTO_ResponseTable<DTO_Transactions>> UpdateTransactionAsync(DTO_Transactions dto)
+        public async Task<DTO_ResponseTable<DTO_Transactions>> UpdateTransactionAsync(DTO_Transactions dto, int userId)
         {
+            if (dto == null)
+                return DTO_ResponseTable<DTO_Transactions>.FailureResult("Dados inválidos.");
+
+            // Inicia transação de base de dados
+            using var dbTransaction = await _context.Database.BeginTransactionAsync();
+
             try
             {
-                if (dto == null)
-                    return DTO_ResponseTable<DTO_Transactions>.FailureResult("Dados inválidos.");
+                // Vai buscar a transação atual da BD (estado ANTES do update)
+                var existingTransaction = await _context.Transactions
+                    .SingleOrDefaultAsync(t => t.Id == dto.Id && t.UserId == userId);
 
-                // Mapeia DTO -> Entidade
-                Transaction entity = _mapper.Map<Transaction>(dto);
+                if (existingTransaction == null)
+                    return DTO_ResponseTable<DTO_Transactions>.FailureResult("Transação não encontrada.");
 
-                // Executa comando/serviço de atualização
-                Transaction? updated = await _updateTransaction.ExecuteAsync(entity);
+                // Guarda snapshot dos campos que afetam o saldo
+                var oldTransaction = new Transaction
+                {
+                    Amount = existingTransaction.Amount,
+                    IsIncome = existingTransaction.IsIncome
+                };
 
-                if (updated == null)
-                    return DTO_ResponseTable<DTO_Transactions>.FailureResult("Falha ao atualizar transação.");
+                // Aplica alterações do DTO na entidade EXISTENTE
+                _mapper.Map(dto, existingTransaction);
+
+                //// Atualiza saldo do utilizador após a criação da transação
+                //await _userBalanceService.UpdateUserBalanceAsync(userId, existingTransaction, oldTransaction);
+
+                //// Mapeia DTO -> Entidade
+                //Transaction entity = _mapper.Map<Transaction>(dto);
+
+                //// Executa comando/serviço de atualização
+                //Transaction? updated = await _updateTransaction.ExecuteAsync(entity);
+
+                //if (updated == null)
+                //    return DTO_ResponseTable<DTO_Transactions>.FailureResult("Falha ao atualizar transação.");
+
+                // Guarda as alterações na Base de Dados
+                await _context.SaveChangesAsync();
+                await dbTransaction.CommitAsync();
 
                 // Mapeia Entidade -> DTO para retorno
-                var updatedDto = _mapper.Map<DTO_Transactions>(updated);
+                var updatedDto = _mapper.Map<DTO_Transactions>(existingTransaction); 
 
                 return DTO_ResponseTable<DTO_Transactions>.SuccessResult(
                     updatedDto,
@@ -104,9 +132,8 @@ namespace MoneyFlowAPI.Services
             }
             catch (Exception ex)
             {
-                return DTO_ResponseTable<DTO_Transactions>.FailureResult(
-                    $"Erro ao atualizar transação: {ex.Message}"
-                );
+                await dbTransaction.RollbackAsync();
+                return DTO_ResponseTable<DTO_Transactions>.FailureResult($"Erro ao atualizar transação: {ex.Message}");
             }
         }
         #endregion
@@ -114,9 +141,10 @@ namespace MoneyFlowAPI.Services
         #region POST
         public async Task<DTO_ResponseTable<DTO_Transactions>> CreateTransactionAsync(DTO_Transactions dto, int userId)
         {
-                if (dto == null)
-                    return DTO_ResponseTable<DTO_Transactions>.FailureResult("Dados inválidos.");
+            if (dto == null)
+                return DTO_ResponseTable<DTO_Transactions>.FailureResult("Dados inválidos.");
 
+            // Inicia transação de base de dados
             using var dbTransaction = await _context.Database.BeginTransactionAsync();
 
             try
@@ -132,6 +160,8 @@ namespace MoneyFlowAPI.Services
                 // Atualiza saldo do utilizador após a criação da transação
                 await _userBalanceService.UpdateUserBalanceAsync(userId, created);
 
+                // Guarda as alterações na Base de Dados
+                await _context.SaveChangesAsync();
                 await dbTransaction.CommitAsync();
 
                 // Mapeia Entidade -> DTO para retorno
@@ -151,28 +181,44 @@ namespace MoneyFlowAPI.Services
         #endregion
 
         #region DELETE
-        public async Task<DTO_ResponseTable<string>> DeleteTransactionsAsync(List<int> transactions)
+        public async Task<DTO_ResponseTable<string>> DeleteTransactionsAsync(List<int> transactionsIds, int userId)
         {
+            // Inicia transação de base de dados
+            using var dbTransaction = await _context.Database.BeginTransactionAsync();
+
             try
             {
-                if (transactions == null || !transactions.Any())
+                if (transactionsIds == null || !transactionsIds.Any())
                     return DTO_ResponseTable<string>.FailureResult("Nenhuma transação para exclusão.");
 
-                // Executa serviço/command responsável pela exclusão
-                bool deleted = await _deleteTransactions.ExecuteAsync(transactions);
+                List<Transaction> transactions = await _context.Transactions
+                    .Where(t => transactionsIds.Contains(t.Id))
+                    .ToListAsync();
 
-                if (!deleted)
-                    return DTO_ResponseTable<string>.FailureResult("Falha ao excluir transações.");
+                if (!transactions.Any())
+                    return DTO_ResponseTable<string>.FailureResult("Transações não encontradas.");
 
-                return DTO_ResponseTable<string>.SuccessResult(
-                    "Transações removidas com sucesso."
-                );
+                // Atualiza saldo do utilizador
+                foreach (Transaction transaction in transactions)
+                {
+                    await _userBalanceService.UpdateUserBalanceAsync(userId, transaction, isDelete: true);
+                }
+
+                // Remove as transações já carregadas
+                _context.Transactions.RemoveRange(transactions);
+
+                // Guarda as alterações na Base de Dados
+                await _context.SaveChangesAsync();
+
+                // Confirma a transação
+                await dbTransaction.CommitAsync();
+
+                return DTO_ResponseTable<string>.SuccessResult("Transações removidas com sucesso.");
             }
             catch (Exception ex)
             {
-                return DTO_ResponseTable<string>.FailureResult(
-                    $"Erro ao excluir transações: {ex.Message}"
-                );
+                await dbTransaction.RollbackAsync();
+                return DTO_ResponseTable<string>.FailureResult($"Erro ao excluir transações: {ex.Message}");
             }
         }
         #endregion

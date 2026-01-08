@@ -40,7 +40,7 @@ namespace MoneyFlowAPI.Controllers
         [HttpPut("transaction")]
         public async Task<ActionResult<DTO_ResponseTable<DTO_Transactions>>> PutTransaction(DTO_Transactions transaction)
         {
-            var response = await _transactionService.UpdateTransactionAsync(transaction);
+            var response = await _transactionService.UpdateTransactionAsync(transaction, UserId);
 
             if (!response.Success)
                 return BadRequest(response);
@@ -66,7 +66,7 @@ namespace MoneyFlowAPI.Controllers
         [HttpPost("transactions")]
         public async Task<ActionResult<DTO_ResponseTable<string>>> PostTransaction(List<int> transactions)
         {
-            var response = await _transactionService.DeleteTransactionsAsync(transactions);
+            var response = await _transactionService.DeleteTransactionsAsync(transactions, UserId);
 
             if (!response.Success)
                 return BadRequest(response);

@@ -14,11 +14,11 @@ namespace MoneyFlowAPI.Services.Interfaces
         #endregion
 
         #region PUT
-        Task<DTO_ResponseTable<DTO_Transactions>> UpdateTransactionAsync(DTO_Transactions transaction);
+        Task<DTO_ResponseTable<DTO_Transactions>> UpdateTransactionAsync(DTO_Transactions transaction, int userId);
         #endregion
 
         #region DELETE
-        Task<DTO_ResponseTable<string>> DeleteTransactionsAsync(List<int> transactions);
+        Task<DTO_ResponseTable<string>> DeleteTransactionsAsync(List<int> transactions, int userId);
         #endregion
     }
 }

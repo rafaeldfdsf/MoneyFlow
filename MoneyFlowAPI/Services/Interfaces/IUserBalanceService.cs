@@ -5,7 +5,7 @@ namespace MoneyFlowAPI.Services.Interfaces
     public interface IUserBalanceService
     {
         #region PUT
-        Task UpdateUserBalanceAsync(int userId, Transaction created);
+        Task UpdateUserBalanceAsync(int userId, Transaction newTransaction, Transaction? oldTransaction = null, bool isDelete = false);
         #endregion
     }
 }
