@@ -6,8 +6,9 @@ Este projeto pessoal tem como principal objetivo **relembrar, praticar e atualiz
 
 ## Funcionalidades Atuais
 
-- Autenticação de utilizadores (login)
-- Registo de utilizadores disponível apenas para fins de desenvolvimento (via API)
+- Autenticação de utilizadores
+  - Login via frontend
+  - Registo disponível apenas via API (Swagger) para fins de desenvolvimento
 - Criação e gestão de categorias
 - Registo de movimentos financeiros
 - Integração com Swagger para testes da API
