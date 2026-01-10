@@ -1,14 +1,37 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using MoneyFlowAPI.Models;
 using MoneyFlowAPI.Services.Interfaces;
+using MoneyFlowShared.DTOs;
 
 namespace MoneyFlowAPI.Services
 {
     public class UserBalanceService : IUserBalanceService
     {
         private readonly AppDbContext _context;
+        private readonly IMapper _mapper;
 
-        public UserBalanceService(AppDbContext context) => _context = context;
+        public UserBalanceService(AppDbContext context,
+                                  IMapper mapper)
+        {
+            _context = context;
+            _mapper = mapper;
+        }
+
+        #region GET
+        public async Task<DTO_ResponseTable<DTO_UserBalance>> GetUserBalance(int userId)
+        {
+            UserBalance? userBalance = await _context.UserBalances
+                        .FirstOrDefaultAsync(t => t.UserId == userId);
+
+            if (userBalance == null)
+                return DTO_ResponseTable<DTO_UserBalance>.FailureResult("Erro ao obter saldo atual.");
+
+            var dtoList = _mapper.Map<DTO_UserBalance>(userBalance);
+
+            return DTO_ResponseTable<DTO_UserBalance>.SuccessResult(dtoList);
+        }
+        #endregion
 
         #region PUT
         public async Task UpdateUserBalanceAsync(int userId, Transaction newTransaction, Transaction? oldTransaction = null, bool isDelete = false)

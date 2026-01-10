@@ -12,6 +12,8 @@ import { CommonModule } from '@angular/common';
 import { MessageModule } from 'primeng/message';
 import { Toast } from "primeng/toast";
 import { ToastService } from '@/shared/services/toast.service';
+import { UserBalanceService } from '@/services/UserBalance.service';
+import { DTO_UserBalance } from '@/shared/dtos/DTO_UserBalance';
 
 @Component({
   selector: 'app-transactions-list',
@@ -24,6 +26,9 @@ import { ToastService } from '@/shared/services/toast.service';
 export class TransactionsListComponent {
   // Lista de transações (dados vindos do backend)
   transactions = signal<DTO_Transactions[]>([]);
+
+  // Saldo Atual (dados vindos do backend)
+  userBalance = signal<number | 0>(0);
 
   // Controla o estado de loading (spinner)
   loading = signal(false);
@@ -71,6 +76,7 @@ export class TransactionsListComponent {
 
   constructor(
     private transactionsService: TransactionsService,
+    private userBalanceService: UserBalanceService,
     private injectorFactory: Injector,
     private confirmationService: ConfirmationService,
     private toast: ToastService
@@ -91,6 +97,17 @@ export class TransactionsListComponent {
     this.transactionsService.getAll().subscribe({
       next: (data) => {
         this.transactions.set(data);
+        this.loading.set(false);
+      },
+      error: (err) => {
+        console.error('Erro:', err);
+        this.loading.set(false);
+      }
+    });
+
+    this.userBalanceService.get().subscribe({
+      next: (data) => {
+        this.userBalance.set(data?.currentBalance ?? 0);
         this.loading.set(false);
       },
       error: (err) => {

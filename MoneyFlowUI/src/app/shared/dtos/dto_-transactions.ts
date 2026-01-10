@@ -13,7 +13,7 @@ export class DTO_Transactions {
     type: string = "";
     amount: number;
     description: string;
-    transactionDate: Date = new Date("2026-01-04T00:00:00.0000000+00:00");
+    transactionDate: Date = new Date("2026-01-10T00:00:00.0000000+00:00");
     createdAt: Date;
     category: DTO_Category;
 }
