@@ -106,17 +106,17 @@ namespace MoneyFlowAPI.Services
                 // Aplica alterações do DTO na entidade EXISTENTE
                 _mapper.Map(dto, existingTransaction);
 
-                //// Atualiza saldo do utilizador após a criação da transação
-                //await _userBalanceService.UpdateUserBalanceAsync(userId, existingTransaction, oldTransaction);
+                // Atualiza saldo do utilizador após a criação da transação
+                await _userBalanceService.UpdateUserBalanceAsync(userId, existingTransaction, oldTransaction);
 
-                //// Mapeia DTO -> Entidade
-                //Transaction entity = _mapper.Map<Transaction>(dto);
+                // Mapeia DTO -> Entidade
+                Transaction entity = _mapper.Map<Transaction>(dto);
 
-                //// Executa comando/serviço de atualização
-                //Transaction? updated = await _updateTransaction.ExecuteAsync(entity);
+                // Executa comando/serviço de atualização
+                Transaction? updated = await _updateTransaction.ExecuteAsync(entity);
 
-                //if (updated == null)
-                //    return DTO_ResponseTable<DTO_Transactions>.FailureResult("Falha ao atualizar transação.");
+                if (updated == null)
+                    return DTO_ResponseTable<DTO_Transactions>.FailureResult("Falha ao atualizar transação.");
 
                 // Guarda as alterações na Base de Dados
                 await _context.SaveChangesAsync();
