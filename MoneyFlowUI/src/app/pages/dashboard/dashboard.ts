@@ -1,15 +1,14 @@
 import { Component, signal } from '@angular/core';
 import { NotificationsWidget } from './components/notificationswidget';
 import { StatsWidget } from './components/statswidget';
-import { RecentSalesWidget } from './components/recentsaleswidget';
 import { BestSellingWidget } from './components/bestsellingwidget';
 import { RevenueStreamWidget } from './components/revenuestreamwidget';
 import { GenericTableComponent } from "@/shared/components/generic-table/generic-table";
 
 @Component({
-    selector: 'app-dashboard',
-    imports: [StatsWidget, RecentSalesWidget, BestSellingWidget, RevenueStreamWidget, NotificationsWidget, GenericTableComponent],
-    template: `
+  selector: 'app-dashboard',
+  imports: [StatsWidget, BestSellingWidget, RevenueStreamWidget, NotificationsWidget, GenericTableComponent],
+  template: `
         <div class="grid grid-cols-12 gap-8">
             <app-stats-widget class="contents" />
             <div class="col-span-12 xl:col-span-6">
@@ -47,7 +46,6 @@ import { GenericTableComponent } from "@/shared/components/generic-table/generic
     </app-generic-table>
             </div>
             <div class="col-span-12 xl:col-span-6">
-                <app-recent-sales-widget />
                 <app-best-selling-widget />
             </div>
             <div class="col-span-12 xl:col-span-6">
@@ -58,27 +56,27 @@ import { GenericTableComponent } from "@/shared/components/generic-table/generic
     `
 })
 export class Dashboard {
-    customers = signal([
-        { name: 'João', country: 'Brasil', status: 'Ativo' },
-        { name: 'Maria', country: 'Portugal', status: 'Inativo' },
-    ]);
+  customers = signal([
+    { name: 'João', country: 'Brasil', status: 'Ativo' },
+    { name: 'Maria', country: 'Portugal', status: 'Inativo' },
+  ]);
 
-    columns = [
-        { field: 'name', header: 'Nome', sortable: true },
-        { field: 'country', header: 'País', sortable: true },
-        { field: 'status', header: 'Status', sortable: true },
-        { field: 'actions', header: 'Ações' },
-    ];
+  columns = [
+    { field: 'name', header: 'Nome', sortable: true },
+    { field: 'country', header: 'País', sortable: true },
+    { field: 'status', header: 'Status', sortable: true },
+    { field: 'actions', header: 'Ações' },
+  ];
 
-    onRowClick(row: any) {
-        alert(`Cliente selecionado: ${row.name}`);
-    }
+  onRowClick(row: any) {
+    alert(`Cliente selecionado: ${row.name}`);
+  }
 
-    edit(row: any) {
-        console.log('Editar:', row);
-    }
+  edit(row: any) {
+    console.log('Editar:', row);
+  }
 
-    remove(row: any) {
-        console.log('Remover:', row);
-    }
+  remove(row: any) {
+    console.log('Remover:', row);
+  }
 }
