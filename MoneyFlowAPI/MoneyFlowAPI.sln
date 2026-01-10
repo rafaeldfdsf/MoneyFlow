@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoneyFlowAPI", "MoneyFlowAP
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoneyFlowShared", "..\MoneyFlowShared\MoneyFlowShared.csproj", "{1AAB73A9-6077-5416-BB65-83368C9F2EFD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoneyFlowTests", "..\MoneyFlowTests\MoneyFlowTests.csproj", "{C4AF097E-99F9-485F-BDD6-0B0AB05F33D5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{1AAB73A9-6077-5416-BB65-83368C9F2EFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1AAB73A9-6077-5416-BB65-83368C9F2EFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1AAB73A9-6077-5416-BB65-83368C9F2EFD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C4AF097E-99F9-485F-BDD6-0B0AB05F33D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C4AF097E-99F9-485F-BDD6-0B0AB05F33D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C4AF097E-99F9-485F-BDD6-0B0AB05F33D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C4AF097E-99F9-485F-BDD6-0B0AB05F33D5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
