@@ -5,6 +5,7 @@ import { environment } from '../../environment.development';
 import { DTO_Login } from '@/shared/dtos/DTO_Login';
 import { DTO_AuthResponse } from '@/shared/dtos/DTO_AuthResponse';
 import { DTO_Register } from '@/shared/dtos/DTO_Register';
+import { jwtDecode } from 'jwt-decode';
 
 @Injectable({
     providedIn: 'root'
@@ -38,6 +39,22 @@ export class AuthService {
     }
 
     isAuthenticated(): boolean {
-        return !!this.getToken();
+        const token = this.getToken();
+        if (!token) return false;
+
+        try {
+            const decoded: any = jwtDecode(token);
+            const now = Date.now() / 1000;
+
+            if (decoded.exp < now) {
+                this.logout();
+                return false;
+            }
+
+            return true;
+        } catch {
+            return false;
+        }
     }
 }
+
