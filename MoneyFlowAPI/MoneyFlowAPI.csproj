@@ -23,7 +23,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MoneyFlowShared\MoneyFlowShared.csproj" />
-    <ProjectReference Include="..\MoneyFlowTests\MoneyFlowTests.csproj" />
   </ItemGroup>
 
 </Project>
