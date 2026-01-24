@@ -2,17 +2,14 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
-# copiar tudo o que está no repositório
+# copia tudo da pasta MoneyFlowAPI
 COPY . .
 
-# ir para a pasta da API
-WORKDIR /src/MoneyFlowAPI
-
 # restaurar dependências
-RUN dotnet restore
+RUN dotnet restore MoneyFlowAPI.csproj
 
-# publicar aplicação
-RUN dotnet publish -c Release -o /app/publish
+# publicar
+RUN dotnet publish MoneyFlowAPI.csproj -c Release -o /app/publish
 
 # ---------- RUNTIME ----------
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
@@ -21,7 +18,6 @@ WORKDIR /app
 COPY --from=build /app/publish .
 
 EXPOSE 8080
-
 ENV ASPNETCORE_URLS=http://+:8080
 
 ENTRYPOINT ["dotnet", "MoneyFlowAPI.dll"]
