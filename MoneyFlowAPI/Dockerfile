@@ -1,32 +1,30 @@
 ﻿# =========================
-# Build stage
+# BUILD
 # =========================
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
-# copiar tudo
+# copiar o repositório inteiro
 COPY . .
 
-# entrar na pasta da API
-WORKDIR /src/MoneyFlowAPI
+# entrar na pasta correta
+WORKDIR /src/MoneyFlow/MoneyFlowAPI
 
 # restaurar dependências
-RUN dotnet restore
+RUN dotnet restore MoneyFlowAPI.csproj
 
-# compilar
-RUN dotnet publish -c Release -o /app/publish
+# publicar
+RUN dotnet publish MoneyFlowAPI.csproj -c Release -o /app/publish
 
 # =========================
-# Runtime stage
+# RUNTIME
 # =========================
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app
 
 COPY --from=build /app/publish .
 
-# Render usa a variável PORT
 ENV ASPNETCORE_URLS=http://+:$PORT
-
 EXPOSE 10000
 
 ENTRYPOINT ["dotnet", "MoneyFlowAPI.dll"]
