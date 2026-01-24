@@ -14,12 +14,12 @@
     <Folder Include="TypeGenTemplates\" />
   </ItemGroup>
 
-    <Target Name="GenerateAndRenameTsDtos" AfterTargets="Build">
-	    <!-- 1) Gera os .ts para a pasta do Angular -->
+    <!--<Target Name="GenerateAndRenameTsDtos" AfterTargets="Build">
+	    --><!-- 1) Gera os .ts para a pasta do Angular --><!--
 	    <Exec Command="dotnet-typegen generate -p $(MSBuildProjectDirectory) -c $(MSBuildProjectDirectory)\TypeGen.json --output-folder &quot;C:\Work\MoneyFlow\MoneyFlowUI\src\app\shared\dtos&quot;" />
 
-	    <!-- 2) Renomeia os ficheiros para o nome exato da classe -->
+	    --><!-- 2) Renomeia os ficheiros para o nome exato da classe --><!--
 	    <Exec Command="powershell -NoProfile -ExecutionPolicy Bypass -File &quot;$(MSBuildProjectDirectory)\TypeGenTemplates\RenameDtoFiles.ps1&quot; -DtosPath &quot;C:\Work\MoneyFlow\MoneyFlowUI\src\app\shared\dtos&quot;" />
-    </Target>
+    </Target>-->
 
 </Project>
