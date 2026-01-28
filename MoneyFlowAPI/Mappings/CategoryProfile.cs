@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using MoneyFlowAPI.Models;
-using MoneyFlowShared.DTOs;
+using MoneyFlowAPI.Application.DTOs;
 
 namespace MoneyFlowAPI.Mappings
 {

@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using MoneyFlowAPI.Models;
 using MoneyFlowAPI.Services.Interfaces;
-using MoneyFlowShared.DTOs;
+using MoneyFlowAPI.Application.DTOs;
 
 namespace MoneyFlowAPI.Services
 {

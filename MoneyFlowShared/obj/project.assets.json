@@ -15,21 +15,6 @@
           }
         }
       }
-    },
-    "net8.0/win-x64": {
-      "TypeGen/6.0.3": {
-        "type": "package",
-        "compile": {
-          "lib/netstandard2.0/TypeGen.Core.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/netstandard2.0/TypeGen.Core.dll": {
-            "related": ".xml"
-          }
-        }
-      }
     }
   },
   "libraries": {
@@ -441,11 +426,6 @@
           "System.Xml.XPath": "(, 4.3.32767]",
           "System.Xml.XPath.XDocument": "(, 4.3.32767]"
         }
-      }
-    },
-    "runtimes": {
-      "win-x64": {
-        "#import": []
       }
     }
   }

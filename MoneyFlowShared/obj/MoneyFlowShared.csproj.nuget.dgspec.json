@@ -355,11 +355,6 @@
             "System.Xml.XPath.XDocument": "(, 4.3.32767]"
           }
         }
-      },
-      "runtimes": {
-        "win-x64": {
-          "#import": []
-        }
       }
     }
   }

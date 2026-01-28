@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MoneyFlowAPI.Application.DTOs;
 using MoneyFlowAPI.Services.Interfaces;
-using MoneyFlowShared.DTOs;
 
 namespace MoneyFlowAPI.Controllers
 {
