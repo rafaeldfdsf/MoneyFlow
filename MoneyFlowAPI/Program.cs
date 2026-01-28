@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using MoneyFlowAPI.Application.Categories;
 using MoneyFlowAPI.Application.Transactions;
-using MoneyFlowAPI.Mappings;
 using MoneyFlowAPI.Models;
 using MoneyFlowAPI.Services;
 using MoneyFlowAPI.Services.Interfaces;
@@ -24,15 +23,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // Connection String
-//builder.Services.AddDbContext<AppDbContext>(options =>
-//    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(
-        builder.Configuration.GetConnectionString("DefaultConnection")
-    )
-);
-
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 //builder.Services.AddAutoMapper(typeof(TransactionProfile));
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
