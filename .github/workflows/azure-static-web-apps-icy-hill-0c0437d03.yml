@@ -31,8 +31,8 @@ jobs:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_ICY_HILL_0C0437D03 }}
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: "upload"
-          app_location: "./MoneyFlowUI/dist/sakai-ng"
-          output_location: ""
+          app_location: "./MoneyFlowUI"
+          output_location: "dist/sakai-ng/browser"
           skip_app_build: true
 
   close_pull_request_job:
