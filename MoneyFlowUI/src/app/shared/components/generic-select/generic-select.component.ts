@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, forwardRef, Input, OnInit } from '@angular/core';
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { SelectModule } from "primeng/select";
+import { environment } from 'src/environment.development';
 
 @Component({
     selector: 'app-generic-select',
@@ -53,7 +54,7 @@ export class GenericSelectComponent implements ControlValueAccessor, OnInit {
     loadOptions(): void {
         this.loading = true;
 
-        this.http.get<any[]>(this.apiUrl).subscribe({
+        this.http.get<any[]>(`${environment.apiUrl}/${this.apiUrl}`).subscribe({
             next: data => {
                 this.options = data;
                 this.loading = false;
