@@ -17,11 +17,10 @@
             "prefix": "app",
             "architect": {
                 "build": {
-                    "builder": "@angular/build:application",
+                    "builder": "@angular-devkit/build-angular:browser",
                     "options": {
                         "outputPath": "dist/sakai-ng",
                         "index": "src/index.html",
-                        "browser": "src/main.ts",
                         "polyfills": [
                             "zone.js"
                         ],
