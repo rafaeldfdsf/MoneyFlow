@@ -35,13 +35,13 @@ export class Login {
         };
 
         this.authService.login(dto).subscribe({
-            next: (res) => {
+            next: () => {
                 this.loading = false;
-                this.router.navigate(['/dashboard']);
+                this.router.navigate(['/']);
             },
-            error: (err) => {
+            error: () => {
                 this.loading = false;
-                this.errorMessage = 'Email ou senha inválidos.';
+                this.errorMessage = 'Email ou password inváidos.';
             }
         });
     }

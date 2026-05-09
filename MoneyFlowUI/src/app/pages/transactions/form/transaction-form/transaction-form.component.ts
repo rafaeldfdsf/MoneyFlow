@@ -8,7 +8,7 @@ import { DTO_Transactions } from '@/shared/dtos/DTO_Transactions';
 import { TransactionsService } from '@/services/Transactions.service';
 import { ToastService } from '@/shared/services/toast.service';
 import { GenericSelectComponent } from "@/shared/components/generic-select/generic-select.component";
-import { environment } from 'src/environment.development';
+import { environment } from 'src/environment';
 
 @Component({
   selector: 'app-transaction-form',

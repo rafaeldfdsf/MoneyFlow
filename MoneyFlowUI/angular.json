@@ -46,12 +46,26 @@
                             "extractLicenses": true,
                             "vendorChunk": false,
                             "buildOptimizer": true
+                        },
+                        "development": {
+                            "optimization": false,
+                            "sourceMap": true,
+                            "namedChunks": true,
+                            "extractLicenses": false,
+                            "vendorChunk": true,
+                            "buildOptimizer": false,
+                            "fileReplacements": [
+                                {
+                                    "replace": "src/environment.ts",
+                                    "with": "src/environment.development.ts"
+                                }
+                            ]
                         }
                     },
                     "defaultConfiguration": "production"
                 },
                 "serve": {
-                    "builder": "@angular/build:dev-server",
+                    "builder": "@angular-devkit/build-angular:dev-server",
                     "configurations": {
                         "production": {
                             "buildTarget": "sakai-ng:build:production"

@@ -19,7 +19,6 @@
         style="border-radius: 53px"
       >
         <div class="text-center mb-8">
-          <!-- SVG e cabeçalho -->
           <svg
             viewBox="0 0 54 40"
             fill="none"
@@ -39,12 +38,24 @@
           >
             Money Flow
           </div>
-          <span class="text-muted-color font-medium"
-            >Log In</span
-          >
+          <span class="text-muted-color font-medium">Create account</span>
         </div>
 
         <div>
+          <label
+            for="name1"
+            class="block text-surface-900 dark:text-surface-0 text-xl font-medium mb-2"
+            >Nome</label
+          >
+          <input
+            pInputText
+            id="name1"
+            type="text"
+            placeholder="Your name"
+            class="w-full md:w-120 mb-8"
+            [(ngModel)]="name"
+          />
+
           <label
             for="email1"
             class="block text-surface-900 dark:text-surface-0 text-xl font-medium mb-2"
@@ -53,7 +64,7 @@
           <input
             pInputText
             id="email1"
-            type="text"
+            type="email"
             placeholder="Email address"
             class="w-full md:w-120 mb-8"
             [(ngModel)]="email"
@@ -74,27 +85,26 @@
             [feedback]="false"
           ></p-password>
 
-          <div class="flex items-center justify-between mt-2 mb-8 gap-8">
-            <div class="flex items-center">
-              <p-checkbox
-                [(ngModel)]="checked"
-                id="rememberme1"
-                binary
-                class="mr-2"
-              ></p-checkbox>
-              <label for="rememberme1">Remember me</label>
-            </div>
-            <span
-              class="font-medium no-underline ml-2 text-right cursor-pointer text-primary"
-              >Forgot password?</span
-            >
-          </div>
+          <label
+            for="confirmPassword1"
+            class="block text-surface-900 dark:text-surface-0 font-medium text-xl mb-2"
+            >Confirmar password</label
+          >
+          <p-password
+            id="confirmPassword1"
+            [(ngModel)]="confirmPassword"
+            placeholder="Confirm password"
+            [toggleMask]="true"
+            styleClass="mb-4"
+            [fluid]="true"
+            [feedback]="false"
+          ></p-password>
 
           <p-button
-            label="Sign In"
-            styleClass="w-full"
+            label="Create account"
+            styleClass="w-full mt-4"
             [loading]="loading"
-            (onClick)="onLogin()"
+            (onClick)="onRegister()"
           ></p-button>
 
           @if (errorMessage) {
@@ -103,13 +113,19 @@
             </p>
           }
 
+          @if (successMessage) {
+            <p class="text-green-600 text-center mt-3">
+              {{ successMessage }}
+            </p>
+          }
+
           <div class="text-center mt-6">
-            <span class="text-muted-color">Não tem uma conta?</span>
+            <span class="text-muted-color">Já tem uma conta?</span>
             <a
-              routerLink="/auth/register"
+              routerLink="/auth/login"
               class="font-medium no-underline ml-2 text-primary cursor-pointer"
             >
-              Criar Conta
+              Log in
             </a>
           </div>
         </div>

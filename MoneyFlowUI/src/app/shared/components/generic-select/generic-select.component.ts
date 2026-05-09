@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, forwardRef, Input, OnInit } from '@angular/core';
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { SelectModule } from "primeng/select";
-import { environment } from 'src/environment.development';
+import { environment } from 'src/environment';
 
 @Component({
     selector: 'app-generic-select',

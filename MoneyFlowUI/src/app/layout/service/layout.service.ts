@@ -28,9 +28,9 @@ interface MenuChangeEvent {
 export class LayoutService {
     _config: layoutConfig = {
         preset: 'Aura',
-        primary: 'emerald',
-        surface: null,
-        darkTheme: false,
+        primary: 'blue',
+        surface: 'zinc',
+        darkTheme: true,
         menuMode: 'static'
     };
 
@@ -79,6 +79,8 @@ export class LayoutService {
     private initialized = false;
 
     constructor() {
+        this.toggleDarkMode(this._config);
+
         effect(() => {
             const config = this.layoutConfig();
             if (config) {

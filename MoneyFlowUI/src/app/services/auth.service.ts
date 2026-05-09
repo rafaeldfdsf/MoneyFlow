@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
-import { environment } from '../../environment.development';
+import { environment } from 'src/environment';
 import { DTO_Login } from '@/shared/dtos/DTO_Login';
 import { DTO_AuthResponse } from '@/shared/dtos/DTO_AuthResponse';
 import { DTO_Register } from '@/shared/dtos/DTO_Register';

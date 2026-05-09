@@ -2,7 +2,7 @@ import { DTO_Category } from '@/shared/dtos/DTO_Category';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { BaseHttpService } from './base-http.service';
-import { environment } from 'src/environment.development';
+import { environment } from 'src/environment';
 
 @Injectable({ providedIn: 'root' })
 export class CategoriesService {

@@ -2,7 +2,7 @@ import { DTO_Transactions } from '@/shared/dtos/DTO_Transactions';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { BaseHttpService } from './base-http.service';
-import { environment } from 'src/environment.development';
+import { environment } from 'src/environment';
 
 @Injectable({ providedIn: 'root' })
 export class TransactionsService {
