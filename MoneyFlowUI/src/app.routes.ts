@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { AppLayout } from './app/layout/component/app.layout';
-import { Dashboard } from './app/pages/dashboard/dashboard';
+import { DashboardComponent } from './app/pages/dashboard/dashboard.component';
 import { authGuard } from '@/guards/auth-guard';
 
 export const appRoutes: Routes = [
@@ -9,7 +9,7 @@ export const appRoutes: Routes = [
         component: AppLayout,
         canActivate: [authGuard],
         children: [
-            { path: '', component: Dashboard },
+            { path: '', component: DashboardComponent },
             { path: 'transactions', loadChildren: () => import('./app/pages/transactions/transactions.routes') },
             { path: 'categories', loadChildren: () => import('./app/pages/categories/categories.routes') }
         ]

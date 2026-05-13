@@ -50,6 +50,9 @@ builder.Services.AddScoped<CreateCategory>();
 builder.Services.AddScoped<DeleteCategory>();
 builder.Services.AddScoped<UpdateCategory>();
 
+// Dashboard
+builder.Services.AddScoped<IDashboardService, DashboardService>();
+
 // User Balance
 builder.Services.AddScoped<IUserBalanceService, UserBalanceService>();
 #endregion
