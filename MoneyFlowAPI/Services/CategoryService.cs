@@ -35,12 +35,9 @@ namespace MoneyFlowAPI.Services
         {
             try
             {
-                var transactions = await _getAllCategories.ExecuteAsync(userId);
+                var categories = await _getAllCategories.ExecuteAsync(userId) ?? new List<Category>();
 
-                if (transactions == null || !transactions.Any())
-                    return DTO_ResponseTable<List<DTO_Category>>.FailureResult("Nenhuma categoria encontrada.");
-
-                var dtoList = _mapper.Map<List<DTO_Category>>(transactions);
+                var dtoList = _mapper.Map<List<DTO_Category>>(categories);
 
                 return DTO_ResponseTable<List<DTO_Category>>.SuccessResult(dtoList);
             }

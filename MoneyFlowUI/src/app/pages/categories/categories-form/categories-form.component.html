@@ -9,9 +9,8 @@
 
 <!-- Conteúdo do formulário -->
 <ng-template #formContent>
-  <form #form="ngForm" class="p-fluid grid gap-3" (ngModelChange)="isFormValid = !!form.valid">
+  <form #form="ngForm" class="p-fluid grid gap-3">
     <div class="p-fluid grid gap-3">
-
       <!-- Descrição -->
       <div class="p-field p-col-12">
         <label class="p-mb-2 font-medium">Descrição <span class="required">*</span></label>
@@ -22,6 +21,7 @@
           [(ngModel)]="model.name"
           name="description"
           #description="ngModel"
+          [invalid]="!!description.invalid && (description.touched || isSubmitted)"
           required
         />
 

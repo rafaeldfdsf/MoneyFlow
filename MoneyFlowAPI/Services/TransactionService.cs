@@ -43,10 +43,7 @@ namespace MoneyFlowAPI.Services
         {
             try
             {
-                var transactions = await _getAllTransactions.ExecuteAsync(userId);
-
-                if (transactions == null || !transactions.Any())
-                    return DTO_ResponseTable<List<DTO_Transactions>>.FailureResult("Nenhuma transação encontrada.");
+                var transactions = await _getAllTransactions.ExecuteAsync(userId) ?? new List<Transaction>();
 
                 var dtoList = _mapper.Map<List<DTO_Transactions>>(transactions);
 
