@@ -14,7 +14,7 @@ namespace MoneyFlowAPI.Controllers
 
         #region GET
         [HttpGet("transactions")]
-        public async Task<ActionResult<DTO_ResponseTable<List<DTO_Transactions>>>> GetAll()
+        public async Task<ActionResult<DTO_ResponseTable<DTO_TransactionsPage>>> GetAll()
         {
             var response = await _transactionService.GetAllTransactionsAsync(UserId);
 

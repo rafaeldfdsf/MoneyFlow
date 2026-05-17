@@ -1,4 +1,3 @@
-using AutoMapper;
 using System.Globalization;
 using Microsoft.EntityFrameworkCore;
 using MoneyFlowAPI.Application.DTOs;
@@ -10,12 +9,10 @@ namespace MoneyFlowAPI.Services
     public class DashboardService : IDashboardService
     {
         private readonly AppDbContext _context;
-        private readonly IMapper _mapper;
 
-        public DashboardService(AppDbContext context, IMapper mapper)
+        public DashboardService(AppDbContext context)
         {
             _context = context;
-            _mapper = mapper;
         }
 
         public async Task<DTO_ResponseTable<DTO_Dashboard>> GetDashboardAsync(int userId)
@@ -63,7 +60,7 @@ namespace MoneyFlowAPI.Services
                 var topCategories = monthlyTransactions
                     .Where(transaction => !transaction.IsIncome)
                     .GroupBy(transaction => string.IsNullOrWhiteSpace(transaction.Category?.Name) ? "Sem categoria" : transaction.Category!.Name)
-                    .Select(group => new DashboardTopCategorySummary
+                    .Select(group => new DTO_DashboardTopCategory
                     {
                         Name = group.Key,
                         Total = group.Sum(transaction => transaction.Amount),
@@ -79,7 +76,7 @@ namespace MoneyFlowAPI.Services
                 var monthLabel = new DateTime(today.Year, today.Month, 1)
                     .ToString("MMMM 'de' yyyy", CultureInfo.GetCultureInfo("pt-PT"));
 
-                var dashboardSummary = new DTO_Dashboard
+                var dto = new DTO_Dashboard
                 {
                     MonthLabel = monthLabel,
                     CurrentBalance = balance,
@@ -96,8 +93,6 @@ namespace MoneyFlowAPI.Services
                     LatestTransactionDate = latestTransaction?.TransactionDate,
                     TopCategories = topCategories
                 };
-
-                var dto = _mapper.Map<DTO_Dashboard>(dashboardSummary);
 
                 return DTO_ResponseTable<DTO_Dashboard>.SuccessResult(dto);
             }

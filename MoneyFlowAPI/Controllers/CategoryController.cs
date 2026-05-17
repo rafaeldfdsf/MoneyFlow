@@ -14,7 +14,7 @@ namespace MoneyFlowAPI.Controllers
 
         #region GET
         [HttpGet("categories")]
-        public async Task<ActionResult<DTO_ResponseTable<List<DTO_Category>>>> GetAll()
+        public async Task<ActionResult<DTO_ResponseTable<DTO_CategoriesPage>>> GetAll()
         {
             var response = await _categoryService.GetAllCategoriesAsync(UserId);
 
@@ -43,7 +43,7 @@ namespace MoneyFlowAPI.Controllers
             if (!categories.Success || categories.Data == null)
                 return Ok(Array.Empty<DTO_SelectOption>());
 
-            var result = categories.Data.Select(c => new DTO_SelectOption
+            var result = categories.Data.Categories.Select(c => new DTO_SelectOption
             {
                 Value = c.Id,
                 Label = c.Name

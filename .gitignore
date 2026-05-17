@@ -1,0 +1,21 @@
+# Artefactos gerados por build .NET
+**/bin/
+**/obj/
+
+# Artefactos gerados por Angular / Node
+**/node_modules/
+**/dist/
+**/.angular/cache/
+**/out-tsc/
+**/coverage/
+**/tmp/
+
+# Ficheiros temporários de IDE / sistema
+**/.vs/
+**/.vscode/
+*.user
+*.suo
+*.rsuser
+Thumbs.db
+.DS_Store
+

@@ -1,17 +1,30 @@
-<div class="card">
-  <!-- HEADER CUSTOMIZÁVEL -->
-  @if (headerTemplate) {
-    <ng-container [ngTemplateOutlet]="headerTemplate"></ng-container>
-  } @else {
-    <div class="flex justify-between items-center mb-3">
-      <h3 class="font-semibold text-lg">{{ title() }}</h3>
-      <div class="flex items-center gap-2">
-        <input
-          type="text"
-          pInputText
-          placeholder="Pesquisar..."
-          (input)="onGlobalFilter($event)"
+<div class="generic-table-shell">
+  <div class="generic-table-card">
+    @if (headerTemplate) {
+      <ng-container [ngTemplateOutlet]="headerTemplate"></ng-container>
+    } @else {
+      <div class="generic-table-header">
+        <div>
+          <h3 class="generic-table-title">{{ title() }}</h3>
+          <p class="generic-table-subtitle">{{ data().length }} registo(s)</p>
+        </div>
+      </div>
+    }
+
+    @if (showSearch()) {
+      <div class="generic-table-toolbar">
+        <div class="generic-table-search">
+          <i class="pi pi-search"></i>
+          <input
+            type="text"
+            pInputText
+            [placeholder]="searchPlaceholder()"
+            (input)="onGlobalFilter($event)"
           />
+        </div>
+
+        <div class="generic-table-toolbar-actions">
+          <span class="generic-table-count">{{ data().length }} item(ns)</span>
           <button
             pButton
             icon="pi pi-filter-slash"
@@ -22,94 +35,97 @@
       </div>
     }
 
-    <!-- TABELA -->
-    <p-table
-      #dt
-      [value]="data()"
-      [selection]="showCheckbox() ? selection() : null"
-      [selectionMode]="showCheckbox() ? 'multiple' : null"
-      dataKey="id"
-      [paginator]="paginator()"
-      [rows]="rows()"
-      [globalFilterFields]="globalFilterFields()"
-      [loading]="loading()"
-      (selectionChange)="onSelectionChange($event)"
-      responsiveLayout="scroll"
-      [rowHover]="true"
-      (onRowSelect)="onSelectRow($event)"
+    <div class="generic-table-frame">
+      <p-table
+        #dt
+        [value]="data()"
+        [selection]="showCheckbox() ? selection() : null"
+        [selectionMode]="showCheckbox() ? 'multiple' : null"
+        dataKey="id"
+        [paginator]="paginator()"
+        [rows]="rows()"
+        [globalFilterFields]="globalFilterFields()"
+        [loading]="loading()"
+        (selectionChange)="onSelectionChange($event)"
+        responsiveLayout="scroll"
+        [rowHover]="true"
+        (onRowSelect)="onSelectRow($event)"
       >
-      <!-- HEADER -->
-      <ng-template pTemplate="header">
-        <tr>
-          @if (showCheckbox()) {
-            <th style="width: 3rem" (click)="$event.stopPropagation()">
-              <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-            </th>
-          }
+        <ng-template pTemplate="header">
+          <tr>
+            @if (showCheckbox()) {
+              <th class="checkbox-column" (click)="$event.stopPropagation()">
+                <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+              </th>
+            }
 
-          @for (col of columns(); track col.field) {
-            <th
-              [pSortableColumn]="col.sortable ? col.field : undefined"
-              [style.width]="col.width"
-              [style.text-align]="col.align || 'left'"
+            @for (col of columns(); track col.field) {
+              <th
+                [pSortableColumn]="col.sortable ? col.field : undefined"
+                [style.width]="col.width"
+                [style.text-align]="col.align || 'left'"
               >
-              {{ col.header }}
-            </th>
-          }
-        </tr>
-      </ng-template>
-
-      <!-- BODY -->
-      <ng-template pTemplate="body" let-row>
-        <tr (click)="rowClick.emit(row)">
-          @if (showCheckbox()) {
-      <td style="width: 3rem">
-        <p-tableCheckbox
-          [value]="row"
-          (click)="$event.stopPropagation()"
-        ></p-tableCheckbox>
-      </td>
-    }
-    
-          @for (col of columns(); track col.field) {
-            <td [style.text-align]="col.align || 'left'" [style.width]="col.width">
-
-              <!-- 1️⃣ Template personalizado -->
-              @if (col.template) {
-                <ng-container
-                  [ngTemplateOutlet]="col.template"
-                  [ngTemplateOutletContext]="{ $implicit: row }"
-                ></ng-container>
-
-                <!-- 2️⃣ Coluna de ações automáticas -->
-              } @else if (col.actions?.length) {
-                <div class="flex gap-2 justify-center">
-                  @for (action of col.actions; track action) {
-                    <button
-                      pButton
-                      [icon]="action.icon"
-                      [label]="action.label ?? ''"
-                      [ngClass]="action.class || 'p-button-text'"
-                      (click)="action.onClick(row)"
-                    ></button>
-                  }
-                </div>
-
-                <!-- 3️⃣ Valor normal com formatação automática -->
-              } @else {
-                {{ formatCell(getFieldValue(row, col.field), col) }}
-              }
-
-            </td>
-          }
-        </tr>
-      </ng-template>
-
-      <!-- FOOTER -->
-      @if (footerTemplate) {
-        <ng-template pTemplate="footer">
-          <ng-container [ngTemplateOutlet]="footerTemplate"></ng-container>
+                {{ col.header }}
+              </th>
+            }
+          </tr>
         </ng-template>
-      }
-    </p-table>
+
+        <ng-template pTemplate="body" let-row>
+          <tr class="generic-table-row" (click)="rowClick.emit(row)">
+            @if (showCheckbox()) {
+              <td class="checkbox-column">
+                <p-tableCheckbox
+                  [value]="row"
+                  (click)="$event.stopPropagation()"
+                ></p-tableCheckbox>
+              </td>
+            }
+
+            @for (col of columns(); track col.field) {
+              <td [style.text-align]="col.align || 'left'" [style.width]="col.width">
+                @if (col.template) {
+                  <ng-container
+                    [ngTemplateOutlet]="col.template"
+                    [ngTemplateOutletContext]="{ $implicit: row }"
+                  ></ng-container>
+                } @else if (col.actions?.length) {
+                  <div class="flex gap-2 justify-center">
+                    @for (action of col.actions; track action) {
+                      <button
+                        pButton
+                        [icon]="action.icon"
+                        [label]="action.label ?? ''"
+                        [ngClass]="action.class || 'p-button-text'"
+                        (click)="action.onClick(row)"
+                      ></button>
+                    }
+                  </div>
+                } @else {
+                  {{ formatCell(getFieldValue(row, col.field), col) }}
+                }
+              </td>
+            }
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td [attr.colspan]="columns().length + (showCheckbox() ? 1 : 0)">
+              <div class="generic-table-empty">
+                <i class="pi pi-inbox"></i>
+                <p>{{ emptyMessage() }}</p>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+
+        @if (footerTemplate) {
+          <ng-template pTemplate="footer">
+            <ng-container [ngTemplateOutlet]="footerTemplate"></ng-container>
+          </ng-template>
+        }
+      </p-table>
+    </div>
   </div>
+</div>

@@ -17,7 +17,7 @@
   border-radius: 24px;
   border: 1px solid rgba(148, 163, 184, 0.18);
   background:
-    radial-gradient(circle at top right, rgba(59, 130, 246, 0.14) 0, transparent 28%),
+    radial-gradient(circle at top right, rgba(96, 165, 250, 0.12) 0, transparent 26%),
     linear-gradient(135deg, rgba(248, 250, 252, 0.98), rgba(241, 245, 249, 0.98));
   box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
 }
@@ -34,13 +34,13 @@
 
 .page-hero h1 {
   margin: 0;
-  font-size: clamp(1.55rem, 3vw, 2.25rem);
+  font-size: clamp(1.55rem, 3vw, 2.2rem);
   font-weight: 750;
   color: #0f172a;
 }
 
 .page-hero p {
-  max-width: 40rem;
+  max-width: 38rem;
   margin: 0.5rem 0 0;
   color: #475569;
   line-height: 1.45;
@@ -116,35 +116,16 @@
   text-align: right;
 }
 
-.amount-badge {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.45rem 0.8rem;
-  border-radius: 999px;
-  font-weight: 700;
-  font-size: 0.92rem;
-}
-
-.amount-badge--income {
-  background: rgba(34, 197, 94, 0.14);
-  color: #4ade80;
-}
-
-.amount-badge--expense {
-  background: rgba(239, 68, 68, 0.14);
-  color: #f87171;
-}
-
 :host-context(.app-dark) .page-hero {
   border-color: rgba(255, 255, 255, 0.06);
   background:
-    radial-gradient(circle at top right, rgba(59, 130, 246, 0.12) 0, transparent 26%),
-    linear-gradient(135deg, rgba(20, 24, 32, 0.96), rgba(11, 14, 20, 0.98));
+    radial-gradient(circle at top right, rgba(96, 165, 250, 0.1) 0, transparent 24%),
+    linear-gradient(135deg, rgba(18, 24, 32, 0.96), rgba(12, 18, 28, 0.98));
   box-shadow: none;
 }
 
 :host-context(.app-dark) .page-kicker {
-  color: #7fb3ff;
+  color: #93c5fd;
 }
 
 :host-context(.app-dark) .page-hero h1 {

@@ -1,4 +1,5 @@
 import { DTO_Transactions } from '@/shared/dtos/DTO_Transactions';
+import { DTO_TransactionsPage } from '@/shared/dtos/DTO_TransactionsPage';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { BaseHttpService } from './base-http.service';
@@ -11,8 +12,8 @@ export class TransactionsService {
 
     constructor(private base: BaseHttpService) { }
 
-    getAll(): Observable<DTO_Transactions[]> {
-        return this.base.getList<DTO_Transactions>(`${this.apiUrl}/transactions`);
+    getAll(): Observable<DTO_TransactionsPage | null> {
+        return this.base.getOne<DTO_TransactionsPage>(`${this.apiUrl}/transactions`);
     }
 
     getById(id: number): Observable<DTO_Transactions | null> {

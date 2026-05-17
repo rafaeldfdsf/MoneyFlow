@@ -5,7 +5,7 @@ namespace MoneyFlowAPI.Services.Interfaces
     public interface ITransactionService
     {
         #region GET
-        Task<DTO_ResponseTable<List<DTO_Transactions>>> GetAllTransactionsAsync(int userId);
+        Task<DTO_ResponseTable<DTO_TransactionsPage>> GetAllTransactionsAsync(int userId);
         Task<DTO_ResponseTable<DTO_Transactions>> GetTransactionAsync(int id);
         #endregion
 

@@ -1,16 +1,220 @@
-// .card {
-//     background: var(--surface-card);
-//     padding: 1rem;
-//     border-radius: 8px;
-//     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-// }
+:host {
+  display: block;
+}
 
-// :host ::ng-deep .p-datatable-thead>tr>th {
-//     background-color: #f8f9fa;
-//     font-weight: 600;
-// }
+.generic-table-shell {
+  position: relative;
+}
 
-// :host ::ng-deep .p-datatable .p-datatable-tbody>tr:hover {
-//     background-color: #f1f5f9;
-//     cursor: pointer;
-// }
+.generic-table-card {
+  border: 1px solid color-mix(in srgb, var(--surface-300) 45%, transparent);
+  background:
+    radial-gradient(circle at top right, color-mix(in srgb, var(--primary-color) 7%, transparent) 0, transparent 28%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(248, 250, 252, 0.98));
+  border-radius: 24px;
+  padding: 1.2rem;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.14);
+}
+
+:host-context(.app-dark) .generic-table-card {
+  background:
+    radial-gradient(circle at top right, color-mix(in srgb, var(--primary-color) 8%, transparent) 0, transparent 30%),
+    linear-gradient(180deg, rgba(28, 31, 38, 0.95), rgba(21, 23, 29, 0.98));
+  border-color: rgba(255, 255, 255, 0.05);
+}
+
+.generic-table-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.generic-table-title {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-color);
+}
+
+.generic-table-subtitle {
+  margin: 0.35rem 0 0;
+  color: var(--text-color-secondary);
+  font-size: 0.92rem;
+}
+
+.generic-table-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.generic-table-search {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: min(100%, 22rem);
+  flex: 1 1 18rem;
+  padding: 0.75rem 0.95rem;
+  border-radius: 16px;
+  border: 1px solid color-mix(in srgb, var(--surface-300) 36%, transparent);
+  background: rgba(255, 255, 255, 0.85);
+}
+
+:host-context(.app-dark) .generic-table-search {
+  border-color: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.generic-table-search i {
+  color: var(--text-color-secondary);
+}
+
+.generic-table-search input {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  padding: 0;
+}
+
+.generic-table-toolbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-left: auto;
+}
+
+.generic-table-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.45rem 0.75rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--primary-color) 10%, transparent);
+  color: var(--text-color);
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.generic-table-frame {
+  overflow: hidden;
+  border-radius: 18px;
+  border: 1px solid color-mix(in srgb, var(--surface-300) 24%, transparent);
+  background: rgba(255, 255, 255, 0.88);
+}
+
+:host-context(.app-dark) .generic-table-frame {
+  border-color: rgba(255, 255, 255, 0.04);
+  background: rgba(255, 255, 255, 0.012);
+}
+
+.generic-table-row {
+  cursor: pointer;
+}
+
+.checkbox-column {
+  width: 3.25rem;
+}
+
+.generic-table-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.85rem;
+  padding: 2.75rem 1rem;
+  color: var(--text-color-secondary);
+  text-align: center;
+}
+
+.generic-table-empty i {
+  font-size: 2rem;
+}
+
+:host ::ng-deep {
+  .p-inputtext {
+    width: 100%;
+  }
+
+  .p-datatable {
+    border-radius: 22px;
+    overflow: hidden;
+  }
+
+  .p-datatable .p-datatable-header {
+    border: 0;
+    background: transparent;
+  }
+
+  .p-datatable .p-datatable-thead > tr > th {
+    padding: 0.95rem 1rem;
+    background: rgba(248, 250, 252, 0.95);
+    color: #64748b;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    border: 0;
+  }
+
+  .app-dark .p-datatable .p-datatable-thead > tr > th,
+  :host-context(.app-dark) .p-datatable .p-datatable-thead > tr > th {
+    background: rgba(255, 255, 255, 0.02);
+  }
+
+  .p-datatable .p-datatable-tbody > tr > td {
+    padding: 0.95rem 1rem;
+    border: 0;
+    vertical-align: middle;
+  }
+
+  .p-datatable .p-datatable-tbody > tr:hover {
+    background: rgba(37, 99, 235, 0.035);
+  }
+
+  .app-dark .p-datatable .p-datatable-tbody > tr:hover,
+  :host-context(.app-dark) .p-datatable .p-datatable-tbody > tr:hover {
+    background: rgba(59, 130, 246, 0.08);
+  }
+
+  .p-paginator {
+    border: 0;
+    background: transparent;
+    padding: 0.9rem;
+  }
+
+  .p-checkbox-box {
+    border-radius: 10px;
+  }
+}
+
+@media (max-width: 768px) {
+  .generic-table-card {
+    padding: 1rem;
+    border-radius: 20px;
+  }
+
+  .generic-table-toolbar {
+    align-items: stretch;
+  }
+
+  .generic-table-search {
+    min-width: 100%;
+  }
+
+  .generic-table-toolbar-actions {
+    width: 100%;
+    justify-content: space-between;
+    margin-left: 0;
+  }
+
+  :host ::ng-deep .p-datatable .p-datatable-thead > tr > th,
+  :host ::ng-deep .p-datatable .p-datatable-tbody > tr > td {
+    padding-left: 0.85rem;
+    padding-right: 0.85rem;
+  }
+}

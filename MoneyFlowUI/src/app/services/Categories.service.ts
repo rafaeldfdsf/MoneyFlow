@@ -1,4 +1,5 @@
 import { DTO_Category } from '@/shared/dtos/DTO_Category';
+import { DTO_CategoriesPage } from '@/shared/dtos/DTO_CategoriesPage';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { BaseHttpService } from './base-http.service';
@@ -11,8 +12,8 @@ export class CategoriesService {
 
     constructor(private base: BaseHttpService) { }
 
-    getAll(): Observable<DTO_Category[]> {
-        return this.base.getList<DTO_Category>(`${this.apiUrl}/categories`);
+    getAll(): Observable<DTO_CategoriesPage | null> {
+        return this.base.getOne<DTO_CategoriesPage>(`${this.apiUrl}/categories`);
     }
 
     getById(id: number): Observable<DTO_Category | null> {

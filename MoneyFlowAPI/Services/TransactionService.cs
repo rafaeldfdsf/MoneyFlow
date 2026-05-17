@@ -39,19 +39,50 @@ namespace MoneyFlowAPI.Services
         }
 
         #region GET
-        public async Task<DTO_ResponseTable<List<DTO_Transactions>>> GetAllTransactionsAsync(int userId)
+        public async Task<DTO_ResponseTable<DTO_TransactionsPage>> GetAllTransactionsAsync(int userId)
         {
             try
             {
                 var transactions = await _getAllTransactions.ExecuteAsync(userId) ?? new List<Transaction>();
+                var today = DateOnly.FromDateTime(DateTime.Today);
+                var firstDayOfMonth = new DateOnly(today.Year, today.Month, 1);
+                var firstDayOfNextMonth = firstDayOfMonth.AddMonths(1);
+                var currentBalance = await _context.UserBalances
+                    .Where(userBalance => userBalance.UserId == userId)
+                    .Select(userBalance => userBalance.CurrentBalance)
+                    .FirstOrDefaultAsync();
 
                 var dtoList = _mapper.Map<List<DTO_Transactions>>(transactions);
+                var monthlyTransactions = transactions
+                    .Where(transaction =>
+                        transaction.TransactionDate >= firstDayOfMonth &&
+                        transaction.TransactionDate < firstDayOfNextMonth)
+                    .ToList();
 
-                return DTO_ResponseTable<List<DTO_Transactions>>.SuccessResult(dtoList);
+                var monthlyIncome = monthlyTransactions
+                    .Where(transaction => transaction.IsIncome)
+                    .Sum(transaction => transaction.Amount);
+
+                var monthlyExpense = monthlyTransactions
+                    .Where(transaction => !transaction.IsIncome)
+                    .Sum(transaction => transaction.Amount);
+
+                var dto = new DTO_TransactionsPage
+                {
+                    Transactions = dtoList,
+                    CurrentBalance = currentBalance,
+                    MonthlyIncome = monthlyIncome,
+                    MonthlyExpense = monthlyExpense,
+                    NetFlow = monthlyIncome - monthlyExpense,
+                    TotalTransactionsCount = dtoList.Count,
+                    MonthlyTransactionsCount = monthlyTransactions.Count
+                };
+
+                return DTO_ResponseTable<DTO_TransactionsPage>.SuccessResult(dto);
             }
             catch (Exception ex)
             {
-                return DTO_ResponseTable<List<DTO_Transactions>>.FailureResult($"Erro ao obter transações: {ex.Message}"); 
+                return DTO_ResponseTable<DTO_TransactionsPage>.FailureResult($"Erro ao obter transações: {ex.Message}");
             }
         }
 

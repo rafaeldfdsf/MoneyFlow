@@ -1,11 +1,57 @@
-<p-toolbar styleClass="mb-6">
-  <ng-template #start>
-    <p-button label="Nova" icon="pi pi-plus" severity="secondary" class="mr-2" (onClick)="openNew()" />
-    <p-button label="Eliminar" icon="pi pi-trash" severity="secondary" [disabled]="selectedTransactions.length === 0" outlined (onClick)="deleteSelectedProducts()" />
-  </ng-template>
-</p-toolbar>
+<section class="page-shell">
+  <div class="page-hero">
+    <div class="page-hero__copy">
+      <h1>Movimentos</h1>
+      <p>
+        Consulte, crie e edite os seus movimentos num único sítio.
+      </p>
+    </div>
 
-<app-generic-table
+    <div class="page-hero__actions">
+      <p-button label="Nova" icon="pi pi-plus" severity="secondary" (onClick)="openNew()"></p-button>
+      <p-button
+        label="Eliminar"
+        icon="pi pi-trash"
+        severity="secondary"
+        [disabled]="selectedTransactions.length === 0"
+        outlined
+        (onClick)="deleteSelectedProducts()"
+      ></p-button>
+    </div>
+  </div>
+
+  <div class="stats-grid">
+    <article class="stats-card stats-card--primary">
+      <span class="stats-card__label">Saldo atual</span>
+      <strong>{{ userBalance() | currency:'EUR':'symbol':'1.2-2' }}</strong>
+      <small>Reflete todos os movimentos registados até ao momento.</small>
+    </article>
+
+    <article class="stats-card">
+      <span class="stats-card__label">Receitas do mês</span>
+      <strong>{{ monthlyIncome() | currency:'EUR':'symbol':'1.2-2' }}</strong>
+      <small>{{ monthlyTransactionsCount() }} movimento(s) no período atual.</small>
+    </article>
+
+    <article class="stats-card">
+      <span class="stats-card__label">Despesas do mês</span>
+      <strong>{{ monthlyExpense() | currency:'EUR':'symbol':'1.2-2' }}</strong>
+      <small>Saídas acumuladas no mês corrente.</small>
+    </article>
+
+    <article class="stats-card" [class.stats-card--danger]="netFlow() < 0" [class.stats-card--success]="netFlow() >= 0">
+      <span class="stats-card__label">Fluxo líquido</span>
+      <strong>{{ netFlow() | currency:'EUR':'symbol':'1.2-2' }}</strong>
+      <small>{{ selectedTransactions.length }} item(ns) selecionado(s).</small>
+    </article>
+  </div>
+
+  <div class="mobile-hint">
+    <i class="pi pi-arrows-h"></i>
+    <span>Em telemóvel, pode deslizar a tabela horizontalmente.</span>
+  </div>
+
+  <app-generic-table
     [title]="'Transações'"
     [data]="transactions()"
     [columns]="columns"
@@ -13,32 +59,20 @@
     [showCheckbox]="true"
     [rows]="5"
     [loading]="loading()"
+    [globalFilterFields]="['description', 'type']"
+    [emptyMessage]="'Ainda não existem transações registadas.'"
+    [searchPlaceholder]="'Pesquisar por descrição ou tipo...'"
     (rowClick)="onRowClick($event)"
-    (selectionChange)="onSelectionChange($event)">
-    <!-- Custom header -->
+    (selectionChange)="onSelectionChange($event)"
+  >
     <ng-template #headerTemplate>
-  <div class="flex justify-between items-center mb-4">
-
-    <!-- Título -->
-    <h2 class="text-xl font-semibold text-gray-800">
-      Transações
-    </h2>
-
-    <!-- Saldo -->
-    <div class="flex flex-col items-end bg-green-50 border border-green-200 px-4 py-2 rounded-lg">
-      <span class="text-xs text-green-700">
-        Saldo atual
-      </span>
-      <span class="text-lg font-bold text-green-800">
-        {{ userBalance() | number:'1.2-2' }} €
-      </span>
-    </div>
-
-  </div>
-</ng-template>
-
-</app-generic-table>
-
+      <div class="table-meta">
+        <span>{{ totalTransactionsCount() }} registo(s)</span>
+        <span>{{ selectedTransactions.length }} selecionado(s)</span>
+      </div>
+    </ng-template>
+  </app-generic-table>
+</section>
 
 <app-transaction-form
   [(visible)]="dialogVisible"
@@ -46,18 +80,15 @@
   [isEdit]="isEdit"
   (saveTransaction)="loadTransactions()"
   [idObject]="SelectedRowId"
-  >
-</app-transaction-form>
+></app-transaction-form>
 
 <ng-template #amountTemplate let-row>
   <span
-    [style.color]="row.isIncome ? '#2e7d32' : '#d32f2f'"
-    style="font-weight: 600 !important; color: inherit"
-    [ngStyle]="{
-      color: row.isIncome ? '#2e7d32 !important' : '#d32f2f !important'
-    }"
-    >
-    {{ row.amount }}
+    class="amount-badge"
+    [class.amount-badge--income]="row.isIncome"
+    [class.amount-badge--expense]="!row.isIncome"
+  >
+    {{ row.amount | currency:'EUR':'symbol':'1.2-2' }}
   </span>
 </ng-template>
 

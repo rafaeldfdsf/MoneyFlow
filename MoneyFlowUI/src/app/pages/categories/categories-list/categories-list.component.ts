@@ -1,58 +1,69 @@
-import { Component, Injector, signal } from '@angular/core';
-import { Toolbar } from "primeng/toolbar";
-import { Button } from "primeng/button";
-import { GenericTableComponent } from "@/shared/components/generic-table/generic-table";
-import { TableColumnDefinition } from '@/shared/models/table-column.model';
-import { ConfirmationService, MessageService } from 'primeng/api';
-import { ConfirmDialog } from "primeng/confirmdialog";
 import { CommonModule } from '@angular/common';
+import { Component, Injector, signal } from '@angular/core';
+import { Button } from 'primeng/button';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { ConfirmDialog } from 'primeng/confirmdialog';
 import { MessageModule } from 'primeng/message';
-import { Toast } from "primeng/toast";
-import { ToastService } from '@/shared/services/toast.service';
-import { DTO_Category } from '@/shared/dtos/DTO_Category';
+import { Toast } from 'primeng/toast';
 import { CategoriesService } from '@/services/Categories.service';
+import { GenericTableComponent } from '@/shared/components/generic-table/generic-table';
+import { DTO_Category } from '@/shared/dtos/DTO_Category';
+import { TableColumnDefinition } from '@/shared/models/table-column.model';
+import { ToastService } from '@/shared/services/toast.service';
 import { CategoriesFormComponent } from '../../categories/categories-form/categories-form.component';
 
 @Component({
     selector: 'app-categories-list',
-    imports: [Toolbar, Button, GenericTableComponent, ConfirmDialog, CommonModule, MessageModule, Toast, CategoriesFormComponent],
+    imports: [Button, GenericTableComponent, ConfirmDialog, CommonModule, MessageModule, Toast, CategoriesFormComponent],
     providers: [ConfirmationService, MessageService],
-    templateUrl: './categories-list.component.html'
+    templateUrl: './categories-list.component.html',
+    styleUrl: './categories-list.component.scss'
 })
-
 export class CategoriesListComponent {
-    // Lista de transações (dados vindos do backend)
+    // Lista de categorias vindas do backend.
     categories = signal<DTO_Category[]>([]);
 
-    // Controla o estado de loading (spinner)
+    // Número total de categorias.
+    totalCategoriesCount = signal(0);
+
+    // Categorias criadas no mês atual.
+    monthlyCategoriesCount = signal(0);
+
+    // Nome da última categoria criada.
+    latestCategoryName = signal('Sem dados');
+
+    // Data da última categoria criada.
+    latestCategoryCreatedAt = signal<string | null>(null);
+
+    // Controla o estado de loading.
     loading = signal(false);
 
-    // Guarda a linha atualmente selecionada
+    // Guarda a linha atualmente selecionada.
     selectedCustomer: any;
 
-    // Injector usado para passar dados dinamicamente para o componente do formulário (edit)
+    // Injector usado para passar dados dinamicamente para o formulário.
     dialogInjector!: Injector;
 
-    // Transação atualmente em edição/criação
+    // Categoria atualmente em edição/criação.
     selectedCategory: any = {};
 
-    // Flag para distinguir entre criar ou editar
+    // Flag para distinguir entre criar ou editar.
     isEdit = false;
 
-    // Controla a visibilidade do diálogo (form)
+    // Controla a visibilidade do diálogo.
     dialogVisible = false;
 
-    // Lista de transações selecionadas
+    // Lista de categorias selecionadas.
     selectedCategories: DTO_Category[] = [];
 
-    // ID da linha atualmente selecionada
+    // ID da linha atualmente selecionada.
     SelectedRowId = 0;
 
-    // Definição das colunas da tabela
+    // Definição das colunas da tabela.
     columns: TableColumnDefinition<DTO_Category>[] = [];
 
     /**
-     * Colunas da tabela
+     * Colunas da tabela.
      */
     ngAfterViewInit() {
         this.columns = [
@@ -68,20 +79,24 @@ export class CategoriesListComponent {
     ) { }
 
     /**
-     * Carrega os dados iniciais
+     * Carrega os dados iniciais.
      */
     ngOnInit(): void {
         this.loadCategories();
     }
 
     /**
-     * Método para ir buscar os registos para a grid
+     * Vai buscar os registos para a grelha e os indicadores da página.
      */
     loadCategories(): void {
         this.loading.set(true);
         this.categoriesService.getAll().subscribe({
             next: (data) => {
-                this.categories.set(data);
+                this.categories.set(data?.categories ?? []);
+                this.totalCategoriesCount.set(data?.totalCategoriesCount ?? 0);
+                this.monthlyCategoriesCount.set(data?.monthlyCategoriesCount ?? 0);
+                this.latestCategoryName.set(data?.latestCategoryName ?? 'Sem dados');
+                this.latestCategoryCreatedAt.set(data?.latestCategoryCreatedAt ?? null);
                 this.loading.set(false);
             },
             error: (err) => {
@@ -92,7 +107,7 @@ export class CategoriesListComponent {
     }
 
     /**
-     * Executa quando o utilizador clica numa linha da tabela.
+     * Executa quando o utilizador clica numa linha.
      * Abre o diálogo em modo edição.
      */
     onRowClick(row: DTO_Category) {
@@ -101,9 +116,7 @@ export class CategoriesListComponent {
         this.SelectedRowId = row.id;
 
         this.dialogInjector = Injector.create({
-            providers: [
-                { provide: 'model', useValue: row }
-            ],
+            providers: [{ provide: 'model', useValue: row }],
             parent: this.injectorFactory
         });
 
@@ -111,7 +124,7 @@ export class CategoriesListComponent {
     }
 
     /**
-     * Abre o diálogo para criar um novo registo
+     * Abre o diálogo para criar um novo registo.
      */
     openNew() {
         this.isEdit = false;
@@ -122,7 +135,7 @@ export class CategoriesListComponent {
     }
 
     /**
-     * Abre um diálogo de confirmação e elimina os registos selecionados
+     * Abre um diálogo de confirmação e elimina os registos selecionados.
      */
     deleteSelectedProducts() {
         this.confirmationService.confirm({
@@ -132,9 +145,9 @@ export class CategoriesListComponent {
             acceptLabel: 'Sim',
             rejectLabel: 'Não',
             accept: () => {
-                this.categoriesService.delete(this.selectedCategories.map(i => i.id)).subscribe({
-                    next: (data) => {
-                        this.toast.success("Eliminado com sucesso");
+                this.categoriesService.delete(this.selectedCategories.map((item) => item.id)).subscribe({
+                    next: () => {
+                        this.toast.success('Eliminado com sucesso');
                         this.loadCategories();
                         this.selectedCategories = [];
                     },

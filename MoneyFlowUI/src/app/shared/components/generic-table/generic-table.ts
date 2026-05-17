@@ -21,9 +21,8 @@ import { TagModule } from 'primeng/tag';
   templateUrl: './generic-table.html',
   styleUrl: './generic-table.scss'
 })
-
 export class GenericTableComponent<T> {
-  // 🧠 Inputs reativos
+  // Inputs reativos.
   title = input<string>('');
   data = input<T[]>([]);
   columns = input<{
@@ -44,50 +43,56 @@ export class GenericTableComponent<T> {
     template?: TemplateRef<any>;
   }[]>([]);
 
-
   globalFilterFields = input<string[]>([]);
   paginator = input<boolean>(true);
   rows = input<number>(10);
   loading = input<boolean>(false);
+  emptyMessage = input<string>('Ainda não existem registos para mostrar.');
+  searchPlaceholder = input<string>('Pesquisar...');
+  showSearch = input<boolean>(true);
 
-  // ⚡ Output
+  // Output do clique na linha.
   rowClick = output<T>();
 
-  // controla se a tabela mostra checkbox de seleção
+  // Controla se a tabela mostra checkbox de seleção.
   showCheckbox = input<boolean>(false);
-  // linhas selecionadas (quando showCheckbox = true)
+
+  // Linhas selecionadas (quando showCheckbox = true).
   selection = signal<T[]>([]);
-  // emite seleção para o componente pai
+
+  // Emite seleção para o componente pai.
   selectionChange = output<T[]>();
-
-
 
   @ViewChild('dt') dt!: Table;
 
-  // 🧱 Content projection templates (do pai)
+  // Content projection templates vindos do componente pai.
   @ContentChild('headerTemplate') headerTemplate?: TemplateRef<any>;
   @ContentChild('footerTemplate') footerTemplate?: TemplateRef<any>;
   @ContentChild('actionsTemplate') actionsTemplate?: TemplateRef<any>;
 
-  /** Filtro global */
+  /**
+   * Filtro global da tabela.
+   */
   onGlobalFilter(event: Event) {
     const query = (event.target as HTMLInputElement).value;
     this.dt.filterGlobal(query, 'contains');
   }
 
+  /**
+   * Limpa todos os filtros aplicados.
+   */
   clearFilters() {
     this.dt.clear();
   }
 
+  /**
+   * Trata o clique na seleção sem disparar a edição ao clicar na checkbox.
+   */
   onSelectRow(event: any) {
-    // evento original do DOM
     const originalEvent: Event | undefined = event.originalEvent;
 
-    // se veio da checkbox, ignorar
     if (originalEvent) {
       const target = originalEvent.target as HTMLElement;
-
-      // PrimeNG checkbox usa estes seletores
       const clickedOnCheckbox =
         target.closest('p-tablecheckbox') ||
         target.closest('.p-checkbox') ||
@@ -98,18 +103,22 @@ export class GenericTableComponent<T> {
       }
     }
 
-    // seleção normal da linha → editar
     if (event.data) {
       this.rowClick.emit(event.data);
     }
   }
 
-
+  /**
+   * Resolve campos aninhados como "category.name".
+   */
   getFieldValue(row: any, field: string): any {
     if (!row || !field) return '';
     return field.split('.').reduce((acc, part) => acc?.[part], row);
   }
 
+  /**
+   * Aplica formatação automática às células.
+   */
   formatCell(value: any, col: any): string {
     if (col.format) return col.format(value);
 
@@ -127,6 +136,9 @@ export class GenericTableComponent<T> {
     }
   }
 
+  /**
+   * Atualiza a seleção atual e notifica o componente pai.
+   */
   onSelectionChange(event: any) {
     if (!this.showCheckbox()) return;
 

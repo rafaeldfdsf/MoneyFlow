@@ -31,19 +31,35 @@ namespace MoneyFlowAPI.Services
         }
 
         #region GET
-        public async Task<DTO_ResponseTable<List<DTO_Category>>> GetAllCategoriesAsync(int userId)
+        public async Task<DTO_ResponseTable<DTO_CategoriesPage>> GetAllCategoriesAsync(int userId)
         {
             try
             {
                 var categories = await _getAllCategories.ExecuteAsync(userId) ?? new List<Category>();
 
                 var dtoList = _mapper.Map<List<DTO_Category>>(categories);
+                var now = DateTime.Today;
+                var latestCategory = categories
+                    .OrderByDescending(category => category.CreatedAt ?? DateTime.MinValue)
+                    .FirstOrDefault();
 
-                return DTO_ResponseTable<List<DTO_Category>>.SuccessResult(dtoList);
+                var dto = new DTO_CategoriesPage
+                {
+                    Categories = dtoList,
+                    TotalCategoriesCount = dtoList.Count,
+                    MonthlyCategoriesCount = categories.Count(category =>
+                        category.CreatedAt.HasValue &&
+                        category.CreatedAt.Value.Month == now.Month &&
+                        category.CreatedAt.Value.Year == now.Year),
+                    LatestCategoryName = latestCategory?.Name ?? "Sem dados",
+                    LatestCategoryCreatedAt = latestCategory?.CreatedAt
+                };
+
+                return DTO_ResponseTable<DTO_CategoriesPage>.SuccessResult(dto);
             }
             catch (Exception ex)
             {
-                return DTO_ResponseTable<List<DTO_Category>>.FailureResult($"Erro: {ex.Message}");
+                return DTO_ResponseTable<DTO_CategoriesPage>.FailureResult($"Erro: {ex.Message}");
             }
         }
 

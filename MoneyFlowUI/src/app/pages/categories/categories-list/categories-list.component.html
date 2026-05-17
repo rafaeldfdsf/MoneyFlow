@@ -1,11 +1,59 @@
-<p-toolbar styleClass="mb-6">
-  <ng-template #start>
-    <p-button label="Nova" icon="pi pi-plus" severity="secondary" class="mr-2" (onClick)="openNew()" />
-    <p-button label="Eliminar" icon="pi pi-trash" severity="secondary" [disabled]="selectedCategories.length === 0" outlined (onClick)="deleteSelectedProducts()" />
-  </ng-template>
-</p-toolbar>
+<section class="page-shell">
+  <div class="page-hero">
+    <div class="page-hero__copy">
+      <h1>Categorias</h1>
+      <p>
+        Organize os seus movimentos com categorias simples e fáceis de gerir.
+      </p>
+    </div>
 
-<app-generic-table
+    <div class="page-hero__actions">
+      <p-button label="Nova" icon="pi pi-plus" severity="secondary" (onClick)="openNew()"></p-button>
+      <p-button
+        label="Eliminar"
+        icon="pi pi-trash"
+        severity="secondary"
+        [disabled]="selectedCategories.length === 0"
+        outlined
+        (onClick)="deleteSelectedProducts()"
+      ></p-button>
+    </div>
+  </div>
+
+  <div class="stats-grid">
+    <article class="stats-card stats-card--primary">
+      <span class="stats-card__label">Total de categorias</span>
+      <strong>{{ totalCategoriesCount() }}</strong>
+      <small>Biblioteca total disponível para classificar movimentos.</small>
+    </article>
+
+    <article class="stats-card">
+      <span class="stats-card__label">Criadas este mês</span>
+      <strong>{{ monthlyCategoriesCount() }}</strong>
+      <small>Novas categorias adicionadas no período atual.</small>
+    </article>
+
+    <article class="stats-card">
+      <span class="stats-card__label">Selecionadas</span>
+      <strong>{{ selectedCategories.length }}</strong>
+      <small>Prontas para eliminação em lote, se necessário.</small>
+    </article>
+
+    <article class="stats-card">
+      <span class="stats-card__label">Última categoria</span>
+      <strong>{{ latestCategoryName() }}</strong>
+      <small>
+        {{ latestCategoryCreatedAt() ? (latestCategoryCreatedAt() | date:'dd/MM/yyyy') : 'Ainda não existem categorias.' }}
+      </small>
+    </article>
+  </div>
+
+  <div class="mobile-hint">
+    <i class="pi pi-arrows-h"></i>
+    <span>Em telemóvel, pode deslizar a tabela horizontalmente.</span>
+  </div>
+
+  <app-generic-table
     [title]="'Categorias'"
     [data]="categories()"
     [columns]="columns"
@@ -13,16 +61,20 @@
     [showCheckbox]="true"
     [rows]="5"
     [loading]="loading()"
+    [globalFilterFields]="['name']"
+    [emptyMessage]="'Ainda não existem categorias registadas.'"
+    [searchPlaceholder]="'Pesquisar categoria...'"
     (rowClick)="onRowClick($event)"
-    (selectionChange)="onSelectionChange($event)">
-    <!-- Custom header -->
+    (selectionChange)="onSelectionChange($event)"
+  >
     <ng-template #headerTemplate>
-    <div class="flex justify-between items-center mb-3">
-        <h2>Categorias</h2>
-    </div>
+      <div class="table-meta">
+        <span>{{ totalCategoriesCount() }} registo(s)</span>
+        <span>{{ selectedCategories.length }} selecionada(s)</span>
+      </div>
     </ng-template>
-</app-generic-table>
-
+  </app-generic-table>
+</section>
 
 <app-categories-form
   [(visible)]="dialogVisible"
@@ -30,8 +82,7 @@
   [isEdit]="isEdit"
   (saveCategory)="loadCategories()"
   [idObject]="SelectedRowId"
-  >
-</app-categories-form>
+></app-categories-form>
 
 <p-confirmDialog></p-confirmDialog>
 <p-toast></p-toast>
