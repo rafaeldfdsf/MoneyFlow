@@ -3,9 +3,11 @@ import { FormsModule, NgForm } from '@angular/forms';
 import { Button } from 'primeng/button';
 import { InputText } from 'primeng/inputtext';
 import { Select } from 'primeng/select';
+import { CategoriesService } from '@/services/Categories.service';
 import { TransactionsService } from '@/services/Transactions.service';
 import { GenericDialogComponent } from '@/shared/components/generic-dialog/generic-dialog.component';
 import { GenericSelectComponent } from '@/shared/components/generic-select/generic-select.component';
+import { DTO_Category } from '@/shared/dtos/DTO_Category';
 import { DTO_Transactions } from '@/shared/dtos/DTO_Transactions';
 import { ToastService } from '@/shared/services/toast.service';
 
@@ -45,8 +47,23 @@ export class TransactionFormComponent {
   // Referência ao formulário para repor o estado visual ao abrir/fechar.
   @ViewChild(NgForm) form?: NgForm;
 
+  // Referência ao select de categorias para recarregar as opções após criar uma nova.
+  @ViewChild(GenericSelectComponent) categorySelect?: GenericSelectComponent;
+
   // Marca se o utilizador já tentou guardar o formulário.
   isSubmitted = false;
+
+  // Controla a visibilidade da criação rápida de categoria.
+  isQuickCategoryVisible = false;
+
+  // Nome da categoria a criar a partir do formulário de transação.
+  quickCategoryName = '';
+
+  // Estado de gravação da categoria rápida.
+  isSavingQuickCategory = false;
+
+  // Marca se o utilizador já tentou guardar a categoria rápida.
+  isQuickCategorySubmitted = false;
 
   // Tipos disponíveis para o campo "Tipo".
   types = [
@@ -56,6 +73,7 @@ export class TransactionFormComponent {
 
   constructor(
     public transactionsService: TransactionsService,
+    private categoriesService: CategoriesService,
     private toast: ToastService
   ) { }
 
@@ -135,6 +153,7 @@ export class TransactionFormComponent {
    */
   private resetSubmissionState() {
     this.isSubmitted = false;
+    this.isQuickCategorySubmitted = false;
   }
 
   /**
@@ -160,7 +179,70 @@ export class TransactionFormComponent {
     this.visible = false;
     this.visibleChange.emit(false);
     this.resetSubmissionState();
+    this.resetQuickCategoryState();
     this.form?.resetForm(this.model);
+  }
+
+  /**
+   * Mostra a criação rápida de categoria no próprio formulário.
+   */
+  openQuickCategory() {
+    this.isQuickCategoryVisible = true;
+    this.isQuickCategorySubmitted = false;
+    this.quickCategoryName = '';
+  }
+
+  /**
+   * Fecha a criação rápida e limpa o estado associado.
+   */
+  closeQuickCategory() {
+    this.resetQuickCategoryState();
+  }
+
+  /**
+   * Cria uma categoria sem sair do formulário de transação
+   * e seleciona-a automaticamente no campo respetivo.
+   */
+  saveQuickCategory() {
+    this.isQuickCategorySubmitted = true;
+
+    if (!this.quickCategoryName.trim()) {
+      this.toast.error('Introduza o nome da categoria');
+      return;
+    }
+
+    this.isSavingQuickCategory = true;
+
+    const payload = new DTO_Category();
+    payload.name = this.quickCategoryName.trim();
+
+    this.categoriesService.create(payload).subscribe({
+      next: (data) => {
+        if (!data) {
+          this.isSavingQuickCategory = false;
+          return;
+        }
+
+        this.model.categoryId = data.id;
+        this.categorySelect?.loadOptions();
+        this.resetQuickCategoryState();
+        this.toast.success('Categoria adicionada com sucesso');
+      },
+      error: (err) => {
+        this.isSavingQuickCategory = false;
+        this.toast.error(err);
+      }
+    });
+  }
+
+  /**
+   * Repõe o estado do bloco de criação rápida de categoria.
+   */
+  private resetQuickCategoryState() {
+    this.isQuickCategoryVisible = false;
+    this.quickCategoryName = '';
+    this.isSavingQuickCategory = false;
+    this.isQuickCategorySubmitted = false;
   }
 
   /**

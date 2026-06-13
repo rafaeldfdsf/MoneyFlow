@@ -106,6 +106,18 @@ export class TransactionsListComponent {
 
     this.transactionsService.getAll().subscribe({
       next: (data) => {
+        if (Array.isArray(data)) {
+          this.transactions.set(data);
+          this.userBalance.set(0);
+          this.monthlyIncome.set(0);
+          this.monthlyExpense.set(0);
+          this.netFlow.set(0);
+          this.totalTransactionsCount.set(data.length);
+          this.monthlyTransactionsCount.set(0);
+          this.loading.set(false);
+          return;
+        }
+
         this.transactions.set(data?.transactions ?? []);
         this.userBalance.set(data?.currentBalance ?? 0);
         this.monthlyIncome.set(data?.monthlyIncome ?? 0);

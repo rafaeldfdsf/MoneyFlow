@@ -53,6 +53,7 @@
       <!-- Categoria -->
       <div class="p-field p-col-12 p-md-6">
         <app-generic-select
+          #categorySelect
           label="Categoria"
           apiUrl="Category/select"
           [(ngModel)]="model.categoryId"
@@ -64,6 +65,52 @@
 
         @if (categoryId.invalid && (categoryId.touched || isSubmitted)) {
           <small class="p-error" style="color: #d32f2f;">Campo obrigatório</small>
+        }
+
+        <div class="quick-category-toggle">
+          <p-button
+            label="Adicionar categoria"
+            icon="pi pi-plus-circle"
+            link
+            size="small"
+            (click)="openQuickCategory()"
+          ></p-button>
+        </div>
+
+        @if (isQuickCategoryVisible) {
+          <div class="quick-category-box">
+            <label class="p-mb-2 font-medium">Nova categoria <span class="required">*</span></label>
+
+            <input
+              pInputText
+              class="w-full"
+              placeholder="Ex: Supermercado"
+              [(ngModel)]="quickCategoryName"
+              [ngModelOptions]="{ standalone: true }"
+              [invalid]="!quickCategoryName.trim() && isQuickCategorySubmitted"
+            />
+
+            @if (!quickCategoryName.trim() && isQuickCategorySubmitted) {
+              <small class="p-error" style="color: #d32f2f;">Campo obrigatório</small>
+            }
+
+            <div class="quick-category-actions">
+              <p-button
+                label="Cancelar"
+                icon="pi pi-times"
+                text
+                size="small"
+                (click)="closeQuickCategory()"
+              ></p-button>
+              <p-button
+                label="Guardar categoria"
+                icon="pi pi-check"
+                size="small"
+                [loading]="isSavingQuickCategory"
+                (click)="saveQuickCategory()"
+              ></p-button>
+            </div>
+          </div>
         }
       </div>
 

@@ -12,8 +12,8 @@ export class TransactionsService {
 
     constructor(private base: BaseHttpService) { }
 
-    getAll(): Observable<DTO_TransactionsPage | null> {
-        return this.base.getOne<DTO_TransactionsPage>(`${this.apiUrl}/transactions`);
+    getAll(): Observable<DTO_TransactionsPage | DTO_Transactions[] | null> {
+        return this.base.getOne<DTO_TransactionsPage | DTO_Transactions[]>(`${this.apiUrl}/transactions`);
     }
 
     getById(id: number): Observable<DTO_Transactions | null> {

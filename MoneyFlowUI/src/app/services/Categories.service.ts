@@ -12,8 +12,8 @@ export class CategoriesService {
 
     constructor(private base: BaseHttpService) { }
 
-    getAll(): Observable<DTO_CategoriesPage | null> {
-        return this.base.getOne<DTO_CategoriesPage>(`${this.apiUrl}/categories`);
+    getAll(): Observable<DTO_CategoriesPage | DTO_Category[] | null> {
+        return this.base.getOne<DTO_CategoriesPage | DTO_Category[]>(`${this.apiUrl}/categories`);
     }
 
     getById(id: number): Observable<DTO_Category | null> {

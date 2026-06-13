@@ -1,38 +1,46 @@
-# Projeto Full Stack Angular + ASP.NET
+# Money Flow
 
-Aplicação web **full stack** em desenvolvimento, focada em **Gestão Financeira**, utilizando Angular no frontend e ASP.NET Core no backend.
-Este projeto pessoal tem como principal objetivo **relembrar, praticar e atualizar conhecimentos em Angular**, bem como consolidar a integração com uma API REST em ASP.NET Core.
+Aplicação web **full stack** de gestão financeira pessoal, com:
 
+- **frontend** em Angular
+- **backend** em ASP.NET Core Web API
+- **base de dados** em SQL Server
 
-## Funcionalidades Atuais
+## Documentação principal
 
-- Autenticação de utilizadores
-  - Login via frontend
-  - Registo disponível apenas via API (Swagger) para fins de desenvolvimento
-- Criação e gestão de categorias
-- Registo de movimentos financeiros
-- Integração com Swagger para testes da API
+- [Manual Funcional](./docs/Manual_Funcional.md)
+- [Manual Técnico](./docs/Manual_Tecnico.md)
 
-> Nota: O projeto encontra-se em fase inicial de desenvolvimento e novas funcionalidades estão a ser adicionadas progressivamente.
+## Arranque rápido
 
+### Backend
 
-## Tecnologias Utilizadas
-- Angular
+1. Criar a base de dados local em SQL Server
+2. Executar o script [scriptCriaçãoTabelas.sql](./scriptCriaçãoTabelas.sql)
+3. Ajustar a `DefaultConnection` no backend
+4. Arrancar a API:
+
+```powershell
+cd .\MoneyFlowAPI
+dotnet restore
+dotnet build
+dotnet run
+```
+
+### Frontend
+
+```powershell
+cd .\MoneyFlowUI
+npm install
+npm start
+```
+
+## Tecnologias
+
+- Angular 21
+- PrimeNG
 - ASP.NET Core Web API
 - Entity Framework Core
 - SQL Server
 - Swagger
-
-
-## Como Executar o Projeto
-
-### Backend
-1. Criar uma base de dados local em SQL Server
-2. Executar o script de criação das tabelas (`scriptCriaçãoTabelas.sql`)
-3. Atualizar a `DefaultConnection` no ficheiro de configuração do backend com a ligação criada
-4. Iniciar o backend
-5. Aceder ao Swagger e efetuar o registo de um utilizador
-
-### Frontend
-6. Iniciar o frontend com:
-   ng serve
+- JWT

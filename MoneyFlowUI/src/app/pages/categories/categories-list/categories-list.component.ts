@@ -92,6 +92,16 @@ export class CategoriesListComponent {
         this.loading.set(true);
         this.categoriesService.getAll().subscribe({
             next: (data) => {
+                if (Array.isArray(data)) {
+                    this.categories.set(data);
+                    this.totalCategoriesCount.set(data.length);
+                    this.monthlyCategoriesCount.set(0);
+                    this.latestCategoryName.set('Sem dados');
+                    this.latestCategoryCreatedAt.set(null);
+                    this.loading.set(false);
+                    return;
+                }
+
                 this.categories.set(data?.categories ?? []);
                 this.totalCategoriesCount.set(data?.totalCategoriesCount ?? 0);
                 this.monthlyCategoriesCount.set(data?.monthlyCategoriesCount ?? 0);

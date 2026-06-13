@@ -1,0 +1,35 @@
+.quick-category-toggle {
+  margin-top: 0.35rem;
+}
+
+.quick-category-box {
+  display: grid;
+  gap: 0.65rem;
+  margin-top: 0.6rem;
+  padding: 0.85rem;
+  border-radius: 14px;
+  border: 1px solid rgba(148, 163, 184, 0.24);
+  background: rgba(148, 163, 184, 0.08);
+}
+
+.quick-category-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+:host-context(.app-dark) .quick-category-box {
+  border-color: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+@media (max-width: 640px) {
+  .quick-category-actions {
+    justify-content: stretch;
+  }
+
+  .quick-category-actions ::ng-deep .p-button {
+    width: 100%;
+  }
+}
