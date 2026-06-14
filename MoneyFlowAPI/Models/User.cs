@@ -13,6 +13,8 @@ public partial class User
 
     public string PasswordHash { get; set; } = null!;
 
+    public virtual ICollection<Card> Cards { get; set; } = new List<Card>();
+
     public virtual ICollection<Category> Categories { get; set; } = new List<Category>();
 
     public virtual ICollection<Transaction> Transactions { get; set; } = new List<Transaction>();

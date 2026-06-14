@@ -2,6 +2,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using MoneyFlowAPI.Application.Cards;
 using MoneyFlowAPI.Application.Categories;
 using MoneyFlowAPI.Application.Transactions;
 using MoneyFlowAPI.Models;
@@ -33,6 +34,15 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 #region Services
 builder.Services.AddScoped<AuthService>();
+
+// Cards
+builder.Services.AddScoped<ICardService, CardService>();
+builder.Services.AddScoped<GetAllCards>();
+builder.Services.AddScoped<GetCard>();
+builder.Services.AddScoped<CreateCard>();
+builder.Services.AddScoped<UpdateCard>();
+builder.Services.AddScoped<DeleteCard>();
+builder.Services.AddScoped<UpdateCardsActiveState>();
 
 // Transactions
 builder.Services.AddScoped<ITransactionService, TransactionService>();

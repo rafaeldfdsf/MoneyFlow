@@ -1,7 +1,7 @@
 {
   "generatorOptions": {
     "baseOutputDirectory": "C:/Work/MoneyFlow/MoneyFlowUI/src/app/shared/dtos",
-    "fileHeading": "// Arquivo gerado automaticamente pelo TypeGen a partir dos DTOs C# (n�o editar)\n",
+    "fileHeading": "// Arquivo gerado automaticamente pelo TypeGen a partir dos DTOs C# (não editar)\n",
     "outputFileType": "class",
     "explicitPublicAccessor": false,
     "createIndexFile": false,

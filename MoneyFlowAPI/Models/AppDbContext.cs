@@ -15,6 +15,8 @@ public partial class AppDbContext : DbContext
     {
     }
 
+    public virtual DbSet<Card> Cards { get; set; }
+
     public virtual DbSet<Category> Categories { get; set; }
 
     public virtual DbSet<Transaction> Transactions { get; set; }
@@ -25,6 +27,22 @@ public partial class AppDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<Card>(entity =>
+        {
+            entity.Property(e => e.Brand).HasMaxLength(50);
+            entity.Property(e => e.CardType).HasMaxLength(20);
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("(sysdatetime())")
+                .HasColumnType("datetime2");
+            entity.Property(e => e.CreditLimit).HasColumnType("decimal(18, 2)");
+            entity.Property(e => e.Last4Digits).HasMaxLength(4);
+            entity.Property(e => e.Name).HasMaxLength(100);
+
+            entity.HasOne(d => d.User).WithMany(p => p.Cards)
+                .HasForeignKey(d => d.UserId)
+                .HasConstraintName("FK_Cards_Users");
+        });
+
         modelBuilder.Entity<Category>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__Categori__3214EC071130E3A9");

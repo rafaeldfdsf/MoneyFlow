@@ -10,6 +10,7 @@ export const appRoutes: Routes = [
         canActivate: [authGuard],
         children: [
             { path: '', component: DashboardComponent },
+            { path: 'cards', loadChildren: () => import('./app/pages/cards/cards.routes') },
             { path: 'transactions', loadChildren: () => import('./app/pages/transactions/transactions.routes') },
             { path: 'categories', loadChildren: () => import('./app/pages/categories/categories.routes') }
         ]

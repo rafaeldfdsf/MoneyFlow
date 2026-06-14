@@ -1,0 +1,164 @@
+<app-generic-dialog
+  [visible]="visible"
+  (visibleChange)="onDialogVisibleChange($event)"
+  [header]="isEdit ? 'Editar Cartão' : 'Novo Cartão'"
+  [width]="'560px'"
+  [content]="formContent"
+  [footerTemplate]="formFooter"
+></app-generic-dialog>
+
+<ng-template #formContent>
+  <form #form="ngForm" class="p-fluid grid gap-3">
+    <div class="p-fluid grid gap-3">
+      <div class="p-field p-col-12">
+        <label class="p-mb-2 font-medium">Nome <span class="required">*</span></label>
+        <input
+          pInputText
+          class="w-full"
+          placeholder="Ex: Cartão principal"
+          [(ngModel)]="model.name"
+          name="name"
+          #name="ngModel"
+          [invalid]="!!name.invalid && (name.touched || isSubmitted)"
+          required
+        />
+
+        @if (name.invalid && (name.touched || isSubmitted)) {
+          <small class="p-error" style="color: #d32f2f;">Campo obrigatório</small>
+        }
+      </div>
+
+      <div class="p-field p-col-12 p-md-6">
+        <label class="p-mb-2 font-medium">Tipo <span class="required">*</span></label>
+        <p-select
+          class="w-full"
+          [options]="cardTypes"
+          optionLabel="label"
+          optionValue="value"
+          placeholder="Selecione"
+          [(ngModel)]="model.cardType"
+          (onChange)="onCardTypeChange(model.cardType)"
+          name="cardType"
+          #cardType="ngModel"
+          [invalid]="!!cardType.invalid && (cardType.touched || isSubmitted)"
+          required
+        ></p-select>
+
+        @if (cardType.invalid && (cardType.touched || isSubmitted)) {
+          <small class="p-error" style="color: #d32f2f;">Campo obrigatório</small>
+        }
+      </div>
+
+      <div class="p-field p-col-12 p-md-6">
+        <label class="p-mb-2 font-medium">Estado <span class="required">*</span></label>
+        <p-select
+          class="w-full"
+          [options]="statusOptions"
+          optionLabel="label"
+          optionValue="value"
+          placeholder="Selecione"
+          [(ngModel)]="model.isActive"
+          name="isActive"
+          #isActive="ngModel"
+          [invalid]="!!isActive.invalid && (isActive.touched || isSubmitted)"
+          required
+        ></p-select>
+
+        @if (isActive.invalid && (isActive.touched || isSubmitted)) {
+          <small class="p-error" style="color: #d32f2f;">Campo obrigatório</small>
+        }
+      </div>
+
+      <div class="p-field p-col-12 p-md-6">
+        <label class="p-mb-2 font-medium">Marca</label>
+        <input
+          pInputText
+          class="w-full"
+          placeholder="Ex: Visa, Mastercard"
+          [(ngModel)]="model.brand"
+          name="brand"
+        />
+      </div>
+
+      <div class="p-field p-col-12 p-md-6">
+        <label class="p-mb-2 font-medium">Últimos 4 dígitos</label>
+        <input
+          pInputText
+          class="w-full"
+          placeholder="1234"
+          maxlength="4"
+          [(ngModel)]="model.last4Digits"
+          name="last4Digits"
+          #last4Digits="ngModel"
+          pattern="^[0-9]{4}$"
+          [invalid]="!!last4Digits.invalid && !!model.last4Digits && (last4Digits.touched || isSubmitted)"
+        />
+
+        @if (last4Digits.invalid && model.last4Digits && (last4Digits.touched || isSubmitted)) {
+          <small class="p-error" style="color: #d32f2f;">Introduza exatamente 4 números</small>
+        }
+      </div>
+
+      @if (isCreditCard) {
+        <div class="p-field p-col-12 p-md-4">
+          <label class="p-mb-2 font-medium">Limite de crédito</label>
+          <p-inputnumber
+            class="w-full"
+            inputStyleClass="w-full"
+            [(ngModel)]="model.creditLimit"
+            name="creditLimit"
+            mode="currency"
+            currency="EUR"
+            locale="pt-PT"
+            [min]="0"
+          ></p-inputnumber>
+        </div>
+
+        <div class="p-field p-col-12 p-md-4">
+          <label class="p-mb-2 font-medium">Dia de fecho <span class="required">*</span></label>
+          <p-inputnumber
+            class="w-full"
+            inputStyleClass="w-full"
+            [(ngModel)]="model.closingDay"
+            name="closingDay"
+            #closingDay="ngModel"
+            [min]="1"
+            [max]="31"
+            [useGrouping]="false"
+            [invalid]="!!closingDay.invalid && (closingDay.touched || isSubmitted)"
+            required
+          ></p-inputnumber>
+
+          @if (closingDay.invalid && (closingDay.touched || isSubmitted)) {
+            <small class="p-error" style="color: #d32f2f;">Campo obrigatório</small>
+          }
+        </div>
+
+        <div class="p-field p-col-12 p-md-4">
+          <label class="p-mb-2 font-medium">Dia de pagamento <span class="required">*</span></label>
+          <p-inputnumber
+            class="w-full"
+            inputStyleClass="w-full"
+            [(ngModel)]="model.dueDay"
+            name="dueDay"
+            #dueDay="ngModel"
+            [min]="1"
+            [max]="31"
+            [useGrouping]="false"
+            [invalid]="!!dueDay.invalid && (dueDay.touched || isSubmitted)"
+            required
+          ></p-inputnumber>
+
+          @if (dueDay.invalid && (dueDay.touched || isSubmitted)) {
+            <small class="p-error" style="color: #d32f2f;">Campo obrigatório</small>
+          }
+        </div>
+      }
+    </div>
+  </form>
+</ng-template>
+
+<ng-template #formFooter>
+  <p-button label="Cancelar" icon="pi pi-times" text (click)="close()"></p-button>
+  <p-button label="Guardar" icon="pi pi-check" (click)="save()"></p-button>
+</ng-template>

@@ -35,6 +35,7 @@ export class AppMenu {
             {
                 label: 'Gestão',
                 items: [
+                    { label: 'Cartões', icon: 'pi pi-fw pi-credit-card', routerLink: ['/cards'] },
                     { label: 'Movimentos/Transações', icon: 'pi pi-fw pi-arrow-right-arrow-left', routerLink: ['/transactions'] },
                     { label: 'Categorias', icon: 'pi pi-fw pi-tags', routerLink: ['/categories'] }
                 ]

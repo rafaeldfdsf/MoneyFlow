@@ -1,0 +1,128 @@
+<section class="page-shell">
+  <div class="page-hero">
+    <div class="page-hero__copy">
+      <span class="page-kicker">Cartões</span>
+      <h1>Cartões e meios de pagamento</h1>
+      <p>
+        Registe cartões de débito e crédito para preparar a próxima fase de movimentos e faturas.
+      </p>
+    </div>
+
+    <div class="page-hero__actions">
+      <p-button label="Novo" icon="pi pi-plus" severity="secondary" (onClick)="openNew()"></p-button>
+      <p-button
+        label="Ativar"
+        icon="pi pi-check-circle"
+        severity="secondary"
+        outlined
+        [disabled]="!hasInactiveSelection()"
+        (onClick)="activateSelectedCards()"
+      ></p-button>
+      <p-button
+        label="Desativar"
+        icon="pi pi-ban"
+        severity="secondary"
+        outlined
+        [disabled]="!hasActiveSelection()"
+        (onClick)="deactivateSelectedCards()"
+      ></p-button>
+      <p-button
+        label="Eliminar"
+        icon="pi pi-trash"
+        severity="secondary"
+        outlined
+        [disabled]="selectedCards.length === 0"
+        (onClick)="deleteSelectedCards()"
+      ></p-button>
+    </div>
+  </div>
+
+  <div class="stats-grid">
+    <article class="stats-card stats-card--primary">
+      <span class="stats-card__label">Total de cartões</span>
+      <strong>{{ totalCardsCount() }}</strong>
+      <small>Base disponível para pagamentos e futuras faturas.</small>
+    </article>
+
+    <article class="stats-card">
+      <span class="stats-card__label">Ativos</span>
+      <strong>{{ activeCardsCount() }}</strong>
+      <small>Cartões atualmente disponíveis para utilização.</small>
+    </article>
+
+    <article class="stats-card">
+      <span class="stats-card__label">Crédito</span>
+      <strong>{{ creditCardsCount() }}</strong>
+      <small>Cartões preparados para futura gestão de faturas.</small>
+    </article>
+
+    <article class="stats-card">
+      <span class="stats-card__label">Débito</span>
+      <strong>{{ debitCardsCount() }}</strong>
+      <small>Cartões com impacto direto no saldo na próxima fase.</small>
+    </article>
+  </div>
+
+  <div class="mobile-hint">
+    <i class="pi pi-arrows-h"></i>
+    <span>Em telemóvel, pode deslizar a tabela horizontalmente.</span>
+  </div>
+
+  <app-generic-table
+    [title]="'Cartões'"
+    [data]="cards()"
+    [columns]="columns"
+    [paginator]="true"
+    [showCheckbox]="true"
+    [rows]="5"
+    [loading]="loading()"
+    [globalFilterFields]="['name', 'cardTypeLabel', 'brand', 'maskedNumber']"
+    [emptyMessage]="'Ainda não existem cartões registados.'"
+    [searchPlaceholder]="'Pesquisar cartão...'"
+    (rowClick)="onRowClick($event)"
+    (selectionChange)="onSelectionChange($event)"
+  >
+    <ng-template #headerTemplate>
+      <div class="table-meta">
+        <span>{{ totalCardsCount() }} registo(s)</span>
+        <span>
+          {{ selectedCards.length }} selecionado(s)
+          @if (latestCardCreatedAt()) {
+            • Último: {{ latestCardName() }}
+          }
+        </span>
+      </div>
+    </ng-template>
+  </app-generic-table>
+</section>
+
+<ng-template #typeTemplate let-card>
+  <span class="card-pill" [class.card-pill--credit]="card.cardType === 'Credit'" [class.card-pill--debit]="card.cardType !== 'Credit'">
+    {{ card.cardTypeLabel }}
+  </span>
+</ng-template>
+
+<ng-template #statusTemplate let-card>
+  <span class="status-pill" [class.status-pill--active]="card.isActive" [class.status-pill--inactive]="!card.isActive">
+    {{ card.isActive ? 'Ativo' : 'Inativo' }}
+  </span>
+</ng-template>
+
+<ng-template #limitTemplate let-card>
+  @if (card.cardType === 'Credit' && card.creditLimit !== null && card.creditLimit !== undefined) {
+    {{ card.creditLimit | currency:'EUR':'symbol':'1.2-2':'pt-PT' }}
+  } @else {
+    <span class="muted-cell">N/A</span>
+  }
+</ng-template>
+
+<app-cards-form
+  [(visible)]="dialogVisible"
+  [model]="selectedCard"
+  [isEdit]="isEdit"
+  (saveCard)="loadCards()"
+  [idObject]="SelectedRowId"
+></app-cards-form>
+
+<p-confirmDialog></p-confirmDialog>
+<p-toast></p-toast>
